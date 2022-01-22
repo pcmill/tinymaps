@@ -1,2 +1,3 @@
-# tinymaps
-A mapping library made with a focus on small size and extensibility
+# Tiny Maps
+
+A mapping library made with a focus on small size and extensibility.
