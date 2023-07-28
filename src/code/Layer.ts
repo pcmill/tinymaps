@@ -1,3 +1,4 @@
+import { isEmpty } from "../helpers/util";
 import { BaseMap } from "./BaseMap";
 
 /**
@@ -11,9 +12,13 @@ export class Layer {
     map: BaseMap | null;
 
     constructor(id: string) {
-        this.map = null;
+        if (isEmpty(id)) {
+            throw new Error('Layer id cannot be empty');
+        }
+
         this.id = id;
         this.zoom = 1;
+        this.map = null;
         this.canvas = null;
         this.canvasContext = null;
     }

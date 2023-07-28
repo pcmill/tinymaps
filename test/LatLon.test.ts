@@ -34,4 +34,17 @@ describe('LatLon', () => {
     const longitude = 190;
     expect(() => new LatLon(latitude, longitude)).toThrowError("Longitude must be between -180 and 180");
   });
+
+  it('should throw an error if latitude and longitude are not numbers', () => {
+    const latitude = 'a';
+    const longitude = 'b';
+    // @ts-ignore
+    expect(() => new LatLon(latitude, longitude)).toThrowError("Latitude and longitude must be numbers");
+  });
+
+  it('should throw an error if a value is missing', () => {
+    const latitude = 'a';
+    // @ts-ignore
+    expect(() => new LatLon(latitude, undefined)).toThrowError("Latitude and longitude must be provided");
+  });
 });

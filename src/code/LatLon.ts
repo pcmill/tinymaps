@@ -1,8 +1,18 @@
+import { isEmpty, isInvalidNumber } from "../helpers/util";
+
 export class LatLon {
     latitude: number;
     longitude: number;
 
     constructor(latitude: number, longitude: number) {
+        if (isEmpty(latitude) || isEmpty(longitude)) {
+            throw new Error("Latitude and longitude must be provided");
+        }
+
+        if (isInvalidNumber(latitude) || isInvalidNumber(longitude)) {
+            throw new Error("Latitude and longitude must be numbers");
+        }
+
         if (latitude < -90 || latitude > 90) {
             throw new Error("Latitude must be between -90 and 90");
         }

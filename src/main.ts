@@ -1,5 +1,6 @@
 import { BaseMap } from "./code/BaseMap";
 import { LatLon } from "./code/LatLon";
+import { Point } from "./code/Point";
 import { TileLayer } from "./code/TileLayer";
 import './style.css';
 
@@ -11,11 +12,11 @@ const map = new BaseMap({
 
 const tilelayer = new TileLayer({
   id: 'tiles',
-  tileUrl: 'https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=4hSS0cBAZ5TFqAIlqlBU',
+  tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 });
 
 map.add(tilelayer);
 
 export {
-  LatLon
+  Point
 }

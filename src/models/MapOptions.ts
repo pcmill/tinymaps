@@ -1,7 +1,7 @@
-import { Point } from "../main";
+import { LatLon } from "../code/LatLon";
 
 export type TMapOptions = {
     elementId: string;
-    center: Point;
+    center: LatLon;
     zoom: number;
 }

@@ -2,7 +2,8 @@ import { TMapOptions } from "../models/MapOptions";
 import { Bounds } from "./Bounds";
 import { Layer } from "./Layer";
 import { LatLon } from "./LatLon";
-import { XY } from "./XY";
+import { Point } from "./Point";
+import { latlonToWorldCoordinates } from "../helpers/sphericalMercator";
 
 /**
  * Responsible for translating latlon to pixel values.
@@ -55,12 +56,13 @@ export class BaseMap {
 
         const halfWidth = this._width / 2 * degreePerPixelX;
         const halfHeight = this._height / 2 * degreePerPixelY;
+        console.log(halfWidth, halfHeight);
+        
 
         const topLeft = new LatLon(this._center.latitude + halfHeight, this._center.longitude - halfWidth);
         const bottomRight = new LatLon(this._center.latitude - halfHeight, this._center.longitude + halfWidth);
-        const bounds = new Bounds(topLeft, bottomRight);
 
-        return bounds;
+        return new Bounds(topLeft, bottomRight);
     }
 
     get zoom(): number {
@@ -98,46 +100,31 @@ export class BaseMap {
         return (degrees * Math.PI) / 180;
     }
 
-    latlonToWorldCoordinates(latlon: LatLon): Array<number> {
-        const D = Math.PI / 180;
-        const MAX_LATITUDE = 85.0511287798;
-
-        let latitude = latlon.latitude;
-        let longitude = latlon.longitude;
-
-        // Clamp latitude to the range [-85.0511, 85.0511]
-        latitude = Math.max(Math.min(latitude, MAX_LATITUDE), -MAX_LATITUDE);
-        const sin = Math.sin(latitude * D);
-
-        const worldX = this._radius * longitude * D;
-        const worldY = this._radius * Math.log((1 + sin) / (1 - sin)) / 2;
-
-        // Return the pixel coordinates as TXY
-        return [worldX, worldY];
-    }
-
-    worldCoordinatesToPixelCoordinates(worldCoordinates: Array<number>): Array<number> {
+    worldCoordinatesToPixelCoordinates(worldCoordinates: Point): Point {
         // Convert the map bounds to world coordinates
-        const topLeftWorld = this.latlonToWorldCoordinates(this._mapBounds.topLeft);
-        const bottomRightWorld = this.latlonToWorldCoordinates(this._mapBounds.bottomRight);
+        const topLeftWorld = latlonToWorldCoordinates(this._mapBounds.topLeft);
+        const bottomRightWorld = latlonToWorldCoordinates(this._mapBounds.bottomRight);
+
+        console.log(topLeftWorld, bottomRightWorld);
+        
 
         // Calculate the scales based on the map canvas size and the converted world bounds
-        const scaleX = this._width / (bottomRightWorld[0] - topLeftWorld[0]);
-        const scaleY = this._height / (bottomRightWorld[1] - topLeftWorld[1]);
+        const scaleX = this._width / (bottomRightWorld.x - topLeftWorld.x);
+        const scaleY = this._height / (bottomRightWorld.y - topLeftWorld.y);
 
         // Convert the world coordinates to pixel coordinates
-        const pixelX = (worldCoordinates[0] - topLeftWorld[0]) * scaleX;
-        const pixelY = (topLeftWorld[1] - worldCoordinates[1]) * scaleY;
+        const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
+        const pixelY = (topLeftWorld.y - worldCoordinates.y) * scaleY;
 
         console.log(pixelX, pixelY);
 
-        return [pixelX, pixelY];
+        return new Point(pixelX, pixelY);
     }
 
-    latlonToPixelCoordinates(latlon: LatLon): XY {
-        const worldCoordinates = this.latlonToWorldCoordinates(latlon);
+    latlonToPixelCoordinates(latlon: LatLon): Point {
+        const worldCoordinates = latlonToWorldCoordinates(latlon);
         const pixelCoordinates = this.worldCoordinatesToPixelCoordinates(worldCoordinates);
 
-        return new XY(pixelCoordinates[0], pixelCoordinates[1]);
+        return new Point(pixelCoordinates.x, pixelCoordinates.y);
     }
 }
