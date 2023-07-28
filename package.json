@@ -1,20 +1,17 @@
 {
-    "name": "tinymaps",
-    "version": "1.0.0",
-    "description": "A mapping library made with a focus on small size and extensibility.",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/pcmill/tinymaps.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/pcmill/tinymaps/issues"
-    },
-    "homepage": "https://github.com/pcmill/tinymaps#readme"
+  "name": "tinymaps",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vitest": "^0.33.0"
+  }
 }
