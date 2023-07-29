@@ -105,12 +105,9 @@ export class BaseMap {
         const topLeftWorld = latlonToWorldCoordinates(this._mapBounds.topLeft);
         const bottomRightWorld = latlonToWorldCoordinates(this._mapBounds.bottomRight);
 
-        console.log(topLeftWorld, bottomRightWorld);
-        
-
         // Calculate the scales based on the map canvas size and the converted world bounds
         const scaleX = this._width / (bottomRightWorld.x - topLeftWorld.x);
-        const scaleY = this._height / (bottomRightWorld.y - topLeftWorld.y);
+        const scaleY = this._height / (topLeftWorld.y - bottomRightWorld.y);
 
         // Convert the world coordinates to pixel coordinates
         const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
