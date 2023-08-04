@@ -24,6 +24,8 @@ export class Layer {
     }
 
     setMap(map: Map) {
+        if (!map) throw new Error('Map is required');
+
         this.map = map;
 
         this.canvas = document.createElement('canvas');

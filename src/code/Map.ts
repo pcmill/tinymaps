@@ -78,6 +78,14 @@ export class Map {
         return this._mapBounds;
     }
 
+    addAttribution(html: string) {
+        const attribution = document.createElement("div");
+        attribution.classList.add("attribution");
+        attribution.innerHTML = html;
+
+        this._element.appendChild(attribution);
+    }
+
     private calculateResolution(): number {
         // Define constants
         const tileSize = 256;
@@ -117,14 +125,10 @@ export class Map {
         return (degrees * Math.PI) / 180;
     }
 
-    worldCoordinatesToPixelCoordinates(worldCoordinates: Point): Point {
+    pointToPixel(worldCoordinates: Point): Point {
         // Convert the map bounds to world coordinates
         const topLeftWorld = this._mapBounds.topLeft;
         const bottomRightWorld = this._mapBounds.bottomRight;
-
-        if (!topLeftWorld || !bottomRightWorld) {
-            throw new Error("Map bounds are not set");
-        }
 
         // Calculate the scales based on the map canvas size and the converted world bounds
         const scaleX = this._width / (bottomRightWorld.x - topLeftWorld.x);
@@ -133,8 +137,6 @@ export class Map {
         // Convert the world coordinates to pixel coordinates
         const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
         const pixelY = (topLeftWorld.y - worldCoordinates.y) * scaleY;
-
-        console.log(pixelX, pixelY);
 
         return new Point(pixelX, pixelY);
     }

@@ -13,6 +13,7 @@ const map = new Map({
 const tilelayer = new TileLayer({
   id: 'tiles',
   tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
 });
 
 map.add(tilelayer);

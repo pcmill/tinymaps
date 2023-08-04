@@ -5,17 +5,25 @@ import { LatLon } from "../LatLon";
 
 export class TileLayer extends Layer {
     tileUrl: string;
+    attribution: string;
     
     constructor(tileLayerOptions: TileLayerOptions) {
         super(tileLayerOptions.id);
 
         this.tileUrl = tileLayerOptions.tileUrl;
+        this.attribution = tileLayerOptions.attribution || "";
     }
     
     setMap(map: Map) {
         super.setMap(map);
         
-        this.drawTiles();
+        if (this.map) {
+            this.drawTiles();
+
+            if (this.attribution) {
+                this.map.addAttribution(this.attribution);
+            }
+        }
     }
 
     private drawTiles() {
@@ -77,7 +85,7 @@ export class TileLayer extends Layer {
             const tileLat = this.tileToLat(y);
             const latlon = new LatLon(tileLat, tileLon);
 
-            const coordinates = this.map.worldCoordinatesToPixelCoordinates(this.map._projection.project(latlon));
+            const coordinates = this.map.pointToPixel(this.map._projection.project(latlon));
 
             this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
         };
