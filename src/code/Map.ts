@@ -35,11 +35,11 @@ export class Map {
             throw new Error("Zoom is required and should be between 0 and 20");
         }
 
-        this._center = mapOptions.center;
-        this._zoom = mapOptions.zoom;
-
         // TODO: Make this configurable
         this._projection = new SphericalMercatorProjection();
+
+        this._center = mapOptions.center;
+        this._zoom = mapOptions.zoom;
 
         const element = document.getElementById(mapOptions.elementId);
 
@@ -52,22 +52,6 @@ export class Map {
 
         this._mapBounds = this.calculateBounds();
         this._element = element;
-    }
-
-    // Calculate bounds based on center and zoom and on size of element
-    private calculateBounds() {
-        const degreePerPixelX = 360 / (256 * Math.pow(2, this._zoom));
-        const degreePerPixelY = 180 / (256 * Math.pow(2, this._zoom));
-
-        const halfWidth = this._width / 2 * degreePerPixelX;
-        const halfHeight = this._height / 2 * degreePerPixelY;
-        console.log(halfWidth, halfHeight);
-        
-
-        const topLeft = new LatLon(this._center.latitude + halfHeight, this._center.longitude - halfWidth);
-        const bottomRight = new LatLon(this._center.latitude - halfHeight, this._center.longitude + halfWidth);
-
-        return new Bounds(topLeft, bottomRight);
     }
 
     get zoom(): number {
@@ -92,6 +76,20 @@ export class Map {
 
     get bounds(): Bounds {
         return this._mapBounds;
+    }
+
+    // Calculate bounds based on center and zoom and on size of element
+    private calculateBounds() {
+        const degreePerPixelX = 360 / (256 * Math.pow(2, this._zoom));
+        const degreePerPixelY = 180 / (256 * Math.pow(2, this._zoom));
+
+        const halfWidth = this._width / 2 * degreePerPixelX;
+        const halfHeight = this._height / 2 * degreePerPixelY;
+
+        const topLeft = new LatLon(this._center.latitude + halfHeight, this._center.longitude - halfWidth);
+        const bottomRight = new LatLon(this._center.latitude - halfHeight, this._center.longitude + halfWidth);
+
+        return new Bounds(topLeft, bottomRight);
     }
 
     // Adding a layer to the map

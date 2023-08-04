@@ -20,4 +20,16 @@ export class SphericalMercatorProjection extends Projection {
         // Return the pixel coordinates as TXY
         return new Point(worldX, worldY);
     }
+
+    unproject(point: Point): LatLon | null {
+        if (!point) return null;
+
+        const R = 6378137;
+        const D = 180 / Math.PI;
+    
+        const longitude = point.x * D / R;
+        const latitude = (2 * Math.atan(Math.exp(point.y / R)) - (Math.PI / 2)) * D;
+    
+        return new LatLon(latitude, longitude);
+    }
 }
