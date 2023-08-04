@@ -3,8 +3,8 @@ import { Point } from "../Point";
 import { Projection } from "./Projection";
 
 export class SphericalMercatorProjection extends Projection {
-    project(latlon: LatLon): Point | null {
-        if (!latlon) return null;
+    project(latlon: LatLon): Point {
+        if (!latlon) throw new Error("LatLon is required in projection");
 
         const R = 6378137;
         const D = Math.PI / 180;
@@ -17,12 +17,11 @@ export class SphericalMercatorProjection extends Projection {
         const worldX = R * latlon.longitude * D;
         const worldY = R * Math.log((1 + sin) / (1 - sin)) / 2;
     
-        // Return the pixel coordinates as TXY
         return new Point(worldX, worldY);
     }
 
-    unproject(point: Point): LatLon | null {
-        if (!point) return null;
+    unproject(point: Point): LatLon {
+        if (!point) throw new Error("Point is required in unprojection");
 
         const R = 6378137;
         const D = 180 / Math.PI;

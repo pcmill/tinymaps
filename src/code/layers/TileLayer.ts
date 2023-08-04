@@ -21,7 +21,7 @@ export class TileLayer extends Layer {
     private drawTiles() {
         const tileSize = 256;
         const tileBounds = this.getTileBounds();
-        
+
         for (let x = tileBounds.left; x <= tileBounds.right; x++) {
             for (let y = tileBounds.top; y <= tileBounds.bottom; y++) {
                 const tileUrl = this.getTileUrl(x, y, this.zoom);
@@ -33,13 +33,19 @@ export class TileLayer extends Layer {
     // Gets the bounds of the tiles that should be loaded based on the bounds of the map and the zoom level
     private getTileBounds(): any {
         if (!this.map) return;
+
         const totalTiles = Math.pow(2, this.zoom);
 
-        const left = Math.floor((this.map.bounds.topLeft.longitude + 180) / 360 * totalTiles);
-        const right = Math.floor((this.map.bounds.bottomRight.longitude + 180) / 360 * totalTiles);
-        const top = Math.floor((1 - Math.log(Math.tan(this.map.bounds.topLeft.latitude * Math.PI / 180) + 1 / Math.cos(this.map.bounds.topLeft.latitude * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
-        const bottom = Math.floor((1 - Math.log(Math.tan(this.map.bounds.bottomRight.latitude * Math.PI / 180) + 1 / Math.cos(this.map.bounds.bottomRight.latitude * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
+        const left = Math.floor((this.map.bounds.topLeft.x + 20037508.34) / (2 * 20037508.34) * totalTiles);
+        const right = Math.floor((this.map.bounds.bottomRight.x + 20037508.34) / (2 * 20037508.34) * totalTiles);
         
+        // Convert projected y-coordinates to latitude
+        const topLeftLat = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI);
+        const bottomRightLat = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI);
+
+        const top = Math.floor((1 - Math.log(Math.tan(topLeftLat * Math.PI / 180) + 1 / Math.cos(topLeftLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
+        const bottom = Math.floor((1 - Math.log(Math.tan(bottomRightLat * Math.PI / 180) + 1 / Math.cos(bottomRightLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
+
         return { left, right, top, bottom };
     }
 
@@ -71,11 +77,9 @@ export class TileLayer extends Layer {
             const tileLat = this.tileToLat(y);
             const latlon = new LatLon(tileLat, tileLon);
 
-            const coordinates = this.map.latlonToPixelCoordinates(latlon);
-            
-            if (coordinates) {
-                this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
-            }
+            const coordinates = this.map.worldCoordinatesToPixelCoordinates(this.map._projection.project(latlon));
+
+            this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
         };
     }
 }

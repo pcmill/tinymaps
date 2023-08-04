@@ -11,7 +11,7 @@ import { SphericalMercatorProjection } from "./projection/SphericalMercator";
  * Maintains the list of layers.
  */
 export class Map {
-    _center: LatLon;
+    _center: Point;
     _zoom: number;
     _mapBounds: Bounds;
     _element: HTMLElement;
@@ -38,7 +38,7 @@ export class Map {
         // TODO: Make this configurable
         this._projection = new SphericalMercatorProjection();
 
-        this._center = mapOptions.center;
+        this._center = this._projection.project(mapOptions.center);
         this._zoom = mapOptions.zoom;
 
         const element = document.getElementById(mapOptions.elementId);
@@ -59,7 +59,7 @@ export class Map {
     }
 
     get center(): LatLon {
-        return this._center;
+        return this._projection.unproject(this._center);
     }
 
     get width(): number {
@@ -78,18 +78,32 @@ export class Map {
         return this._mapBounds;
     }
 
+    private calculateResolution(): number {
+        // Define constants
+        const tileSize = 256;
+        const initialResolution = 2 * Math.PI * 6378137 / tileSize;
+    
+        // Calculate resolution based on zoom level
+        const resolution = initialResolution / Math.pow(2, this._zoom);
+    
+        return resolution;
+    }
+
     // Calculate bounds based on center and zoom and on size of element
     private calculateBounds() {
-        const degreePerPixelX = 360 / (256 * Math.pow(2, this._zoom));
-        const degreePerPixelY = 180 / (256 * Math.pow(2, this._zoom));
+        const resolution = this.calculateResolution();
+        
+        // Calculate half extents of the map in projected coordinates
+        const halfWidth = (this._width / 2) * resolution;
+        const halfHeight = (this._height / 2) * resolution;
 
-        const halfWidth = this._width / 2 * degreePerPixelX;
-        const halfHeight = this._height / 2 * degreePerPixelY;
+        // Calculate bounds in projected coordinates
+        const minX = this._center.x - halfWidth;
+        const minY = this._center.y - halfHeight;
+        const maxX = this._center.x + halfWidth;
+        const maxY = this._center.y + halfHeight;
 
-        const topLeft = new LatLon(this._center.latitude + halfHeight, this._center.longitude - halfWidth);
-        const bottomRight = new LatLon(this._center.latitude - halfHeight, this._center.longitude + halfWidth);
-
-        return new Bounds(topLeft, bottomRight);
+        return new Bounds(new Point(minX, maxY), new Point(maxX, minY));
     }
 
     // Adding a layer to the map
@@ -103,35 +117,25 @@ export class Map {
         return (degrees * Math.PI) / 180;
     }
 
-    worldCoordinatesToPixelCoordinates(worldCoordinates: Point): Point | null {
+    worldCoordinatesToPixelCoordinates(worldCoordinates: Point): Point {
         // Convert the map bounds to world coordinates
-        const topLeftWorld = this._projection.project(this._mapBounds.topLeft);
-        const bottomRightWorld = this._projection.project(this._mapBounds.bottomRight);
+        const topLeftWorld = this._mapBounds.topLeft;
+        const bottomRightWorld = this._mapBounds.bottomRight;
 
-        if (topLeftWorld && bottomRightWorld) {
-            // Calculate the scales based on the map canvas size and the converted world bounds
-            const scaleX = this._width / (bottomRightWorld.x - topLeftWorld.x);
-            const scaleY = this._height / (topLeftWorld.y - bottomRightWorld.y);
-    
-            // Convert the world coordinates to pixel coordinates
-            const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
-            const pixelY = (topLeftWorld.y - worldCoordinates.y) * scaleY;
-    
-            console.log(pixelX, pixelY);
-    
-            return new Point(pixelX, pixelY);
+        if (!topLeftWorld || !bottomRightWorld) {
+            throw new Error("Map bounds are not set");
         }
 
-        return null;
-    }
+        // Calculate the scales based on the map canvas size and the converted world bounds
+        const scaleX = this._width / (bottomRightWorld.x - topLeftWorld.x);
+        const scaleY = this._height / (topLeftWorld.y - bottomRightWorld.y);
 
-    latlonToPixelCoordinates(latlon: LatLon): Point | null {
-        const worldCoordinates = this._projection.project(latlon);
-        if (!worldCoordinates) return null;
+        // Convert the world coordinates to pixel coordinates
+        const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
+        const pixelY = (topLeftWorld.y - worldCoordinates.y) * scaleY;
 
-        const pixelCoordinates = this.worldCoordinatesToPixelCoordinates(worldCoordinates);
-        if (!pixelCoordinates) return null;
-        
-        return new Point(pixelCoordinates.x, pixelCoordinates.y);
+        console.log(pixelX, pixelY);
+
+        return new Point(pixelX, pixelY);
     }
 }

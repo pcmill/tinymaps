@@ -1,11 +1,13 @@
-import { LatLon } from "./LatLon";
+import { Point } from "./Point";
 
 export class Bounds {
-    topLeft: LatLon;
-    bottomRight: LatLon;
+    topLeft: Point;
+    bottomRight: Point;
 
-    constructor(topLeft: LatLon, bottomRight: LatLon) {
+    constructor(topLeft: Point, bottomRight: Point) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
+
+        console.log(this.topLeft, this.bottomRight);
     }
 }
