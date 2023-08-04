@@ -93,7 +93,7 @@ export class Map {
     
         // Calculate resolution based on zoom level
         const resolution = initialResolution / Math.pow(2, this._zoom);
-    
+
         return resolution;
     }
 
@@ -138,6 +138,6 @@ export class Map {
         const pixelX = (worldCoordinates.x - topLeftWorld.x) * scaleX;
         const pixelY = (topLeftWorld.y - worldCoordinates.y) * scaleY;
 
-        return new Point(pixelX, pixelY);
+        return new Point(Math.round(pixelX), Math.round(pixelY));
     }
 }
