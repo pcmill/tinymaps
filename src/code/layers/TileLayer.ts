@@ -1,7 +1,7 @@
-import { TileLayerOptions } from "../models/TileLayerOptions";
-import { BaseMap } from "./BaseMap";
+import { TileLayerOptions } from "../../models/TileLayerOptions";
+import { BaseMap } from "../BaseMap";
 import { Layer } from "./Layer";
-import { LatLon } from "./LatLon";
+import { LatLon } from "../LatLon";
 
 export class TileLayer extends Layer {
     tileUrl: string;
@@ -72,9 +72,10 @@ export class TileLayer extends Layer {
             const latlon = new LatLon(tileLat, tileLon);
 
             const coordinates = this.map.latlonToPixelCoordinates(latlon);
-            // console.log(coordinates);
             
-            this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
+            if (coordinates) {
+                this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
+            }
         };
     }
 }

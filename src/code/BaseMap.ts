@@ -1,10 +1,10 @@
 import { TMapOptions } from "../models/MapOptions";
 import { Bounds } from "./Bounds";
-import { Layer } from "./Layer";
+import { Layer } from "./layers/Layer";
 import { LatLon } from "./LatLon";
 import { Point } from "./Point";
 import { Projection } from "./projection/Projection";
-import { SphericalMercatorProjection } from "./projection/sphericalMercator";
+import { SphericalMercatorProjection } from "./projection/SphericalMercator";
 
 /**
  * Responsible for translating latlon to pixel values.

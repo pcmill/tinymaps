@@ -1,5 +1,5 @@
-import { isEmpty } from "../helpers/util";
-import { BaseMap } from "./BaseMap";
+import { isEmpty } from "../../helpers/util";
+import { BaseMap } from "../BaseMap";
 
 /**
  * Responsible for maintaining the canvas

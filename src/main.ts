@@ -1,7 +1,7 @@
 import { BaseMap } from "./code/BaseMap";
 import { LatLon } from "./code/LatLon";
 import { Point } from "./code/Point";
-import { TileLayer } from "./code/TileLayer";
+import { TileLayer } from "./code/layers/TileLayer";
 import './style.css';
 
 const map = new BaseMap({
