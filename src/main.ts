@@ -1,10 +1,10 @@
-import { BaseMap } from "./code/BaseMap";
+import { Map } from "./code/Map";
 import { LatLon } from "./code/LatLon";
 import { Point } from "./code/Point";
 import { TileLayer } from "./code/layers/TileLayer";
 import './style.css';
 
-const map = new BaseMap({
+const map = new Map({
   elementId: 'map',
   center: new LatLon(52.08, 5.12),
   zoom: 11,

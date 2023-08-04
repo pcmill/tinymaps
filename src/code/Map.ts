@@ -10,7 +10,7 @@ import { SphericalMercatorProjection } from "./projection/SphericalMercator";
  * Responsible for translating latlon to pixel values.
  * Maintains the list of layers.
  */
-export class BaseMap {
+export class Map {
     _center: LatLon;
     _zoom: number;
     _mapBounds: Bounds;
@@ -31,12 +31,14 @@ export class BaseMap {
             throw new Error("Center is required");
         }
 
-        if (!mapOptions.zoom) {
-            throw new Error("Zoom is required");
+        if (!mapOptions.zoom || mapOptions.zoom < 0 || mapOptions.zoom > 20) {
+            throw new Error("Zoom is required and should be between 0 and 20");
         }
 
         this._center = mapOptions.center;
         this._zoom = mapOptions.zoom;
+
+        // TODO: Make this configurable
         this._projection = new SphericalMercatorProjection();
 
         const element = document.getElementById(mapOptions.elementId);

@@ -1,7 +1,7 @@
 import { LatLon } from "../LatLon";
 import { Point } from "../Point";
 
-export class Projection {
+export abstract class Projection {
     project(latlon: LatLon): Point | null {
         if (!latlon) return null;
 

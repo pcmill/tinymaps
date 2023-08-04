@@ -1,5 +1,5 @@
 import { isEmpty } from "../../helpers/util";
-import { BaseMap } from "../BaseMap";
+import { Map } from "../Map";
 
 /**
  * Responsible for maintaining the canvas
@@ -9,7 +9,7 @@ export class Layer {
     canvas: HTMLCanvasElement | null;
     canvasContext: CanvasRenderingContext2D | null;
     zoom: number;
-    map: BaseMap | null;
+    map: Map | null;
 
     constructor(id: string) {
         if (isEmpty(id)) {
@@ -23,7 +23,7 @@ export class Layer {
         this.canvasContext = null;
     }
 
-    setMap(map: BaseMap) {
+    setMap(map: Map) {
         this.map = map;
 
         this.canvas = document.createElement('canvas');

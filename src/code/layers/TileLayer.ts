@@ -1,5 +1,5 @@
 import { TileLayerOptions } from "../../models/TileLayerOptions";
-import { BaseMap } from "../BaseMap";
+import { Map } from "../Map";
 import { Layer } from "./Layer";
 import { LatLon } from "../LatLon";
 
@@ -12,7 +12,7 @@ export class TileLayer extends Layer {
         this.tileUrl = tileLayerOptions.tileUrl;
     }
     
-    setMap(map: BaseMap) {
+    setMap(map: Map) {
         super.setMap(map);
         
         this.drawTiles();
