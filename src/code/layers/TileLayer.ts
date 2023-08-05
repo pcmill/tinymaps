@@ -1,17 +1,19 @@
 import { TileLayerOptions } from "../../models/TileLayerOptions";
 import { Map } from "../Map";
 import { Layer } from "./Layer";
-import { LatLon } from "../LatLon";
+import { Point } from "../Point";
 
 export class TileLayer extends Layer {
-    tileUrl: string;
-    attribution: string;
+    _tileUrl: string;
+    _tileSize: number;
+    _attribution: string;
     
     constructor(tileLayerOptions: TileLayerOptions) {
         super(tileLayerOptions.id);
 
-        this.tileUrl = tileLayerOptions.tileUrl;
-        this.attribution = tileLayerOptions.attribution || "";
+        this._tileSize = tileLayerOptions.tileSize || 256;
+        this._tileUrl = tileLayerOptions.tileUrl;
+        this._attribution = tileLayerOptions.attribution || "";
     }
     
     setMap(map: Map) {
@@ -20,27 +22,26 @@ export class TileLayer extends Layer {
         if (this.map) {
             this.drawTiles();
 
-            if (this.attribution) {
-                this.map.addAttribution(this.attribution);
+            if (this._attribution) {
+                this.map.addAttribution(this._attribution);
             }
         }
     }
 
     private drawTiles() {
-        const tileSize = 256;
         const tileBounds = this.getTileBounds();
 
-        for (let x = tileBounds.left; x <= tileBounds.right; x++) {
-            for (let y = tileBounds.top; y <= tileBounds.bottom; y++) {
+        for (let x = tileBounds[0]; x <= tileBounds[1]; x++) {
+            for (let y = tileBounds[2]; y <= tileBounds[3]; y++) {
                 const tileUrl = this.getTileUrl(x, y, this.zoom);
-                this.drawTile(tileUrl, x, y, tileSize);
+                this.drawTile(tileUrl, x, y);
             }
         }
     }
 
     // Gets the bounds of the tiles that should be loaded based on the bounds of the map and the zoom level
-    private getTileBounds(): any {
-        if (!this.map) return;
+    private getTileBounds(): number[] {
+        if (!this.map) throw new Error("Map is not set");
 
         const totalTiles = Math.pow(2, this.zoom);
 
@@ -54,26 +55,34 @@ export class TileLayer extends Layer {
         const top = Math.floor((1 - Math.log(Math.tan(topLeftLat * Math.PI / 180) + 1 / Math.cos(topLeftLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
         const bottom = Math.floor((1 - Math.log(Math.tan(bottomRightLat * Math.PI / 180) + 1 / Math.cos(bottomRightLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
 
-        return { left, right, top, bottom };
+        return [ left, right, top, bottom ];
     }
 
     private getTileUrl(x: number, y: number, zoom: number): string {
-        return this.tileUrl
+        if (!x || !y || !zoom) throw new Error("Invalid tile coordinates");
+
+        return this._tileUrl
             .replace('{x}', x.toString())
             .replace('{y}', y.toString())
             .replace('{z}', zoom.toString());
     }
 
-    private tileToLon(x: number): number {
-        return (x / Math.pow(2, this.zoom) * 360 - 180);
+    private tileExtend(x: number, y: number): number[] {
+        // Calculate the resolution for the given zoom level
+        const resolution = 156543.03392804097 / Math.pow(2, this.zoom);
+
+        // Calculate the extent of the tile in Web Mercator coordinates
+        const extent = [
+          x * this._tileSize * resolution - 20037508.34,
+          20037508.34 - y * this._tileSize * resolution,
+          (x + 1) * this._tileSize * resolution - 20037508.34,
+          20037508.34 - (y + 1) * this._tileSize * resolution,
+        ];
+
+        return extent;
     }
 
-    private tileToLat(y: number): number {
-        const n = Math.PI - 2 * Math.PI * y / Math.pow(2, this.zoom);
-        return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
-    }
-
-    private drawTile(tileUrl: string, x: number, y: number, tileSize: number) {
+    private drawTile(tileUrl: string, x: number, y: number) {
         const img = new Image();
         img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS
         img.src = tileUrl;
@@ -81,13 +90,15 @@ export class TileLayer extends Layer {
         img.onload = () => {
             if (!this.map || !this.canvasContext) return;
 
-            const tileLon = this.tileToLon(x);
-            const tileLat = this.tileToLat(y);
-            const latlon = new LatLon(tileLat, tileLon);
+            const extent = this.tileExtend(x, y);
 
-            const coordinates = this.map.pointToPixel(this.map._projection.project(latlon));
+            const topLeft = new Point(extent[0], extent[1]);
+            const bottomRight = new Point(extent[2], extent[3]);
 
-            this.canvasContext.drawImage(img, coordinates.x, coordinates.y, tileSize, tileSize);
+            const topLeftCoordinates = this.map.pointToPixel(topLeft);
+            const bottomRightCoordinates = this.map.pointToPixel(bottomRight);
+
+            this.canvasContext.drawImage(img, topLeftCoordinates.x, topLeftCoordinates.y, bottomRightCoordinates.x - topLeftCoordinates.x, bottomRightCoordinates.y - topLeftCoordinates.y);
         };
     }
 }

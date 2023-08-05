@@ -88,13 +88,14 @@ export class Map {
 
     private calculateResolution(): number {
         // Define constants
-        const tileSize = 256;
-        const initialResolution = 2 * Math.PI * 6378137 / tileSize;
-    
-        // Calculate resolution based on zoom level
-        const resolution = initialResolution / Math.pow(2, this._zoom);
-
-        return resolution;
+        const earthRadius = 6378137; // in meters
+        const mapWidth = this._width; // in pixels
+        const mapHeight = this._height; // in pixels
+        
+        // Calculate resolution based on zoom level, map width, and map height
+        const resolution = (2 * Math.PI * earthRadius) / (Math.pow(2, this._zoom) * Math.max(mapWidth, mapHeight));
+        
+        return resolution * 2;
     }
 
     // Calculate bounds based on center and zoom and on size of element
