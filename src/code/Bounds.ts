@@ -7,7 +7,5 @@ export class Bounds {
     constructor(topLeft: Point, bottomRight: Point) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
-
-        console.log(this.topLeft, this.bottomRight);
     }
 }

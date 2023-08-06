@@ -3,6 +3,7 @@ import { LatLon } from "./code/LatLon";
 import { Point } from "./code/Point";
 import { TileLayer } from "./code/layers/TileLayer";
 import './style.css';
+import { Pan } from "./code/interactive/Pan";
 
 const map = new Map({
   elementId: 'map',
@@ -18,6 +19,10 @@ const tilelayer = new TileLayer({
 });
 
 map.add(tilelayer);
+
+const pan = new Pan();
+
+map.attach(pan);
 
 export {
   Point

@@ -5,6 +5,7 @@ import { LatLon } from "./LatLon";
 import { Point } from "./Point";
 import { Projection } from "./projection/Projection";
 import { SphericalMercatorProjection } from "./projection/SphericalMercator";
+import { Interactive } from "./interactive/Interactive";
 
 /**
  * Responsible for translating latlon to pixel values.
@@ -18,6 +19,7 @@ export class Map {
     _projection: Projection;
 
     layers: Layer[] = [];
+    interactives: Interactive[] = [];
     _width: number;
     _height: number;
     _radius = 6378137;
@@ -54,12 +56,20 @@ export class Map {
         this._element = element;
     }
 
+    get projection(): Projection {
+        return this._projection;
+    }
+
     get zoom(): number {
         return this._zoom;
     }
 
     get center(): LatLon {
         return this._projection.unproject(this._center);
+    }
+
+    get centerWorld(): Point {
+        return this._center;
     }
 
     get width(): number {
@@ -78,6 +88,24 @@ export class Map {
         return this._mapBounds;
     }
 
+    set centerWorld(center: Point) {
+        this._center = center;
+        this._mapBounds = this.calculateBounds();
+
+        for (const layer of this.layers) {
+            layer.update();
+        }
+    }
+
+    set center(center: LatLon) {
+        this._center = this._projection.project(center);
+        this._mapBounds = this.calculateBounds();
+
+        for (const layer of this.layers) {
+            layer.update();
+        }
+    }
+
     addAttribution(html: string) {
         const attribution = document.createElement("div");
         attribution.classList.add("attribution");
@@ -86,7 +114,7 @@ export class Map {
         this._element.appendChild(attribution);
     }
 
-    private calculateResolution(): number {
+    calculateResolution(): number {
         // Define constants
         const earthRadius = 6378137; // in meters
         const mapWidth = this._width; // in pixels
@@ -122,8 +150,30 @@ export class Map {
         this.layers.push(layer);
     }
 
+    attach(interactive: Interactive) {
+        interactive.setMap(this);
+
+        this.interactives.push(interactive);
+    }
+
     degreesToRadians(degrees: number) {
         return (degrees * Math.PI) / 180;
+    }
+
+    pixelToPoint(pixelCoordinates: Point): Point {
+        // Convert the map bounds to world coordinates
+        const topLeftWorld = this._mapBounds.topLeft;
+        const bottomRightWorld = this._mapBounds.bottomRight;
+
+        // Calculate the scales based on the map canvas size and the converted world bounds
+        const scaleX = (bottomRightWorld.x - topLeftWorld.x) / this._width;
+        const scaleY = (topLeftWorld.y - bottomRightWorld.y) / this._height;
+
+        // Convert the pixel coordinates to world coordinates
+        const worldX = (pixelCoordinates.x * scaleX) + topLeftWorld.x;
+        const worldY = topLeftWorld.y - (pixelCoordinates.y * scaleY);
+
+        return new Point(worldX, worldY);
     }
 
     pointToPixel(worldCoordinates: Point): Point {

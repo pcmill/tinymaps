@@ -28,6 +28,10 @@ export class TileLayer extends Layer {
         }
     }
 
+    update() {
+        this.drawTiles();
+    }
+
     private drawTiles() {
         const tileBounds = this.getTileBounds();
 
@@ -82,6 +86,8 @@ export class TileLayer extends Layer {
         return extent;
     }
 
+    // TODO: Add a buffer to the canvas so that 
+    // a not retrieved from the server every time the map is moved
     private drawTile(tileUrl: string, x: number, y: number) {
         const img = new Image();
         img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS

@@ -23,6 +23,8 @@ export class Layer {
         this.canvasContext = null;
     }
 
+    update(): void {}
+
     setMap(map: Map) {
         if (!map) throw new Error('Map is required');
 
