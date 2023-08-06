@@ -3,6 +3,7 @@ import { TileBuffer } from "../../models/TileBuffer";
 import { Map } from "../Map";
 import { Layer } from "./Layer";
 import { Point } from "../Point";
+import { isEmpty } from "../../helpers/util";
 
 export class TileLayer extends Layer {
     _tileUrl: string;
@@ -64,11 +65,16 @@ export class TileLayer extends Layer {
         const top = Math.floor((1 - Math.log(Math.tan(topLeftLat * Math.PI / 180) + 1 / Math.cos(topLeftLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
         const bottom = Math.floor((1 - Math.log(Math.tan(bottomRightLat * Math.PI / 180) + 1 / Math.cos(bottomRightLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
 
-        return [ left, right, top, bottom ];
+        return [ 
+            Math.max(0, left),
+            Math.max(0, right),
+            Math.max(0, top),
+            Math.max(0, bottom)
+        ];
     }
 
     private getTileUrl(x: number, y: number, zoom: number): string {
-        if (!x || !y || !zoom) throw new Error("Invalid tile coordinates");
+        if (isEmpty(x) || isEmpty(y) || isEmpty(zoom)) throw new Error("Invalid tile coordinates");
 
         return this._tileUrl
             .replace('{x}', x.toString())
