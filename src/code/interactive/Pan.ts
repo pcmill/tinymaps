@@ -2,7 +2,7 @@ import { Map } from "../Map";
 import { Point } from "../Point";
 import { Interactive } from "./Interactive";
 
-export class Pan extends Interactive {
+export class Pan implements Interactive {
     map: Map | null;
     mapRect: DOMRect | null;
     resolution: number;
@@ -10,7 +10,6 @@ export class Pan extends Interactive {
     lastMousePos: Point | null;
 
     constructor() {
-        super();
         this.map = null;
         this.mapRect = null;
         this.resolution = 0;

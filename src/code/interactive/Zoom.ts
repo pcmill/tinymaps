@@ -1,11 +1,10 @@
 import { Map } from "../Map";
 import { Interactive } from "./Interactive";
 
-export class Zoom extends Interactive {
+export class Zoom implements Interactive {
     map: Map | null;
 
     constructor() {
-        super();
         this.map = null;
 
         // Bind the event handlers
