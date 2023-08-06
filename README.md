@@ -41,3 +41,15 @@ try {
 ```
 
 As you can see you `add` layers and `attach` interactivities.
+
+### Status
+
+This library is still in development.
+
+Next goals:
+
+- Mobile zooming and panning
+- Marker layer
+- Zooming should take cursor placement in mind
+- Better handling of the map edges
+- Tile buffer purging
