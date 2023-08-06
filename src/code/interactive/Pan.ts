@@ -27,7 +27,6 @@ export class Pan extends Interactive {
     setMap(map: Map) {
         this.map = map;
         this.mapRect = this.map!.element.getBoundingClientRect();
-        this.resolution = this.map!.calculateResolution();
 
         if (this.map) {
             this.map!.element.addEventListener("mousedown", this.mouseDown);
@@ -50,6 +49,7 @@ export class Pan extends Interactive {
     private mouseDown(event: MouseEvent) {
         event.preventDefault();
 
+        this.resolution = this.map!.calculateResolution();
         this.isPanning = true;
         this.lastMousePos = new Point(event.clientX - this.mapRect!.left, event.clientY - this.mapRect!.top);
 

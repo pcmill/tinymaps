@@ -33,6 +33,7 @@ export class TileLayer extends Layer {
     // TODO: purge the tileBuffer when the map is panned or zoomed
     // so the tileBuffer does not grow indefinitely
     update() {
+        super.update();
         this.drawTiles();
     }
 

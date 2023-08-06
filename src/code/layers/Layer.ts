@@ -23,7 +23,9 @@ export class Layer {
         this.canvasContext = null;
     }
 
-    update(): void {}
+    update(): void {
+        this.zoom = this.map!.zoom;
+    }
 
     setMap(map: Map) {
         if (!map) throw new Error('Map is required');

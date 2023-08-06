@@ -64,6 +64,15 @@ export class Map {
         return this._zoom;
     }
 
+    set zoom(zoom: number) {
+        this._zoom = zoom;
+        this._mapBounds = this.calculateBounds();
+
+        for (const layer of this.layers) {
+            layer.update();
+        }
+    }
+
     get center(): LatLon {
         return this._projection.unproject(this._center);
     }
@@ -119,17 +128,17 @@ export class Map {
         const earthRadius = 6378137; // in meters
         const mapWidth = this._width; // in pixels
         const mapHeight = this._height; // in pixels
-        
+
         // Calculate resolution based on zoom level, map width, and map height
         const resolution = (2 * Math.PI * earthRadius) / (Math.pow(2, this._zoom) * Math.max(mapWidth, mapHeight));
-        
+
         return resolution * 2;
     }
 
     // Calculate bounds based on center and zoom and on size of element
     private calculateBounds() {
         const resolution = this.calculateResolution();
-        
+
         // Calculate half extents of the map in projected coordinates
         const halfWidth = (this._width / 2) * resolution;
         const halfHeight = (this._height / 2) * resolution;
