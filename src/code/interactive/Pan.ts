@@ -21,6 +21,7 @@ export class Pan extends Interactive {
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseUp = this.mouseUp.bind(this);
+        this.handleOutside = this.handleOutside.bind(this);
     }
 
     setMap(map: Map) {
@@ -33,6 +34,19 @@ export class Pan extends Interactive {
         }
     }
 
+    /**
+     * Makes sure that if the mousedown event extends to outside the 
+     * map element, the mouseup event is still captured.
+     * @param event 
+     */
+    private handleOutside(event: MouseEvent) {
+        if (this.isPanning) {
+            this.mouseUp(event);
+        }
+
+        document.removeEventListener("mouseup", this.handleOutside);
+    }
+
     private mouseDown(event: MouseEvent) {
         event.preventDefault();
 
@@ -41,6 +55,7 @@ export class Pan extends Interactive {
 
         this.map!.element.addEventListener("mousemove", this.mouseMove);
         this.map!.element.addEventListener("mouseup", this.mouseUp);
+        document.addEventListener("mouseup", this.handleOutside);
     }
 
     private mouseMove(event: MouseEvent) {
