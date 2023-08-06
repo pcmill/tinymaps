@@ -1,4 +1,5 @@
 import { TileLayerOptions } from "../../models/TileLayerOptions";
+import { TileBuffer } from "../../models/TileBuffer";
 import { Map } from "../Map";
 import { Layer } from "./Layer";
 import { Point } from "../Point";
@@ -7,7 +8,8 @@ export class TileLayer extends Layer {
     _tileUrl: string;
     _tileSize: number;
     _attribution: string;
-    
+    _tileBuffer: TileBuffer[] = [];
+
     constructor(tileLayerOptions: TileLayerOptions) {
         super(tileLayerOptions.id);
 
@@ -28,6 +30,8 @@ export class TileLayer extends Layer {
         }
     }
 
+    // TODO: purge the tileBuffer when the map is panned or zoomed
+    // so the tileBuffer does not grow indefinitely
     update() {
         this.drawTiles();
     }
@@ -86,25 +90,39 @@ export class TileLayer extends Layer {
         return extent;
     }
 
-    // TODO: Add a buffer to the canvas so that 
-    // a not retrieved from the server every time the map is moved
+    private drawTileOnCanvas(image: any, x: number, y: number) {
+        if (!this.map || !this.canvasContext) return;
+
+        const extent = this.tileExtend(x, y);
+
+        const topLeft = new Point(extent[0], extent[1]);
+        const bottomRight = new Point(extent[2], extent[3]);
+
+        const topLeftCoordinates = this.map.pointToPixel(topLeft);
+        const bottomRightCoordinates = this.map.pointToPixel(bottomRight);
+
+        this.canvasContext.drawImage(image, topLeftCoordinates.x, topLeftCoordinates.y, bottomRightCoordinates.x - topLeftCoordinates.x, bottomRightCoordinates.y - topLeftCoordinates.y);
+    }
+
     private drawTile(tileUrl: string, x: number, y: number) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS
-        img.src = tileUrl;
+        const tile = this._tileBuffer.find(tile => tile.id === `${this.zoom}-${x}-${y}`);
 
-        img.onload = () => {
-            if (!this.map || !this.canvasContext) return;
-
-            const extent = this.tileExtend(x, y);
-
-            const topLeft = new Point(extent[0], extent[1]);
-            const bottomRight = new Point(extent[2], extent[3]);
-
-            const topLeftCoordinates = this.map.pointToPixel(topLeft);
-            const bottomRightCoordinates = this.map.pointToPixel(bottomRight);
-
-            this.canvasContext.drawImage(img, topLeftCoordinates.x, topLeftCoordinates.y, bottomRightCoordinates.x - topLeftCoordinates.x, bottomRightCoordinates.y - topLeftCoordinates.y);
-        };
+        if (tile) {
+            this.drawTileOnCanvas(tile.image, x, y);
+            return;
+        } else {
+            const img = new Image();
+            img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS
+            img.src = tileUrl;
+    
+            img.onload = () => {
+                this._tileBuffer.push({
+                    id: `${this.zoom}-${x}-${y}`,
+                    image: img
+                });
+    
+                this.drawTileOnCanvas(img, x, y);
+            };
+        }
     }
 }
