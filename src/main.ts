@@ -2,9 +2,9 @@ import { Map } from "./code/Map";
 import { LatLon } from "./code/LatLon";
 import { Point } from "./code/Point";
 import { TileLayer } from "./code/layers/TileLayer";
-import './style.css';
 import { Pan } from "./code/interactive/Pan";
 import { Zoom } from "./code/interactive/Zoom";
+import './style.css';
 
 const map = new Map({
   elementId: 'map',
