@@ -7,7 +7,7 @@ export class Zoom implements Interactive {
     minZoom: number;
     maxZoom: number;
 
-    constructor(options: ZoomOptions) {
+    constructor(options?: ZoomOptions) {
         this.map = null;
 
         if (options) {
