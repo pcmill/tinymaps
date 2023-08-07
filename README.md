@@ -1,4 +1,4 @@
-# Tiny Maps
+# Tinymaps
 
 A mapping library made with a focus on small size and extensibility. Tinymaps has no dependecies and is written in Typescript.
 
