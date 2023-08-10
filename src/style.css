@@ -4,6 +4,7 @@
     background-color: #ccc;
     overflow: hidden;
     position: relative;
+    touch-action: none;
 }
 
 .attribution {
