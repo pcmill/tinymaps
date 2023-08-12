@@ -8,17 +8,17 @@ class _ {
     this.topLeft = t, this.bottomRight = e;
   }
 }
-function m(a) {
+function d(a) {
   return a == null;
 }
-function d(a) {
+function u(a) {
   return typeof a != "number" || isNaN(a);
 }
 class l {
   constructor(t, e) {
     s(this, "x");
     s(this, "y");
-    if (d(t) || d(e))
+    if (u(t) || u(e))
       throw new Error("Invalid point coordinates");
     this.x = t, this.y = e;
   }
@@ -27,9 +27,9 @@ class p {
   constructor(t, e) {
     s(this, "latitude");
     s(this, "longitude");
-    if (m(t) || m(e))
-      throw new Error("Latitude and longitude must be provided");
     if (d(t) || d(e))
+      throw new Error("Latitude and longitude must be provided");
+    if (u(t) || u(e))
       throw new Error("Latitude and longitude must be numbers");
     if (t < -90 || t > 90)
       throw new Error("Latitude must be between -90 and 90");
@@ -166,7 +166,7 @@ class w {
     s(this, "canvasContext");
     s(this, "zoom");
     s(this, "map");
-    if (m(t))
+    if (d(t))
       throw new Error("Layer id cannot be empty");
     this.id = t, this.zoom = 1, this.map = null, this.canvas = null, this.canvasContext = null;
   }
@@ -225,7 +225,7 @@ class y extends w {
     ];
   }
   getTileUrl(e, i, o) {
-    if (m(e) || m(i) || m(o))
+    if (d(e) || d(i) || d(o))
       throw new Error("Invalid tile coordinates");
     return this._tileUrl.replace("{x}", e.toString()).replace("{y}", i.toString()).replace("{z}", o.toString());
   }
@@ -241,8 +241,8 @@ class y extends w {
   drawTileOnCanvas(e, i, o) {
     if (!this.map || !this.canvasContext)
       return;
-    const n = this.tileExtend(i, o), r = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(r), u = this.map.pointToPixel(h);
-    this.canvasContext.drawImage(e, c.x, c.y, u.x - c.x, u.y - c.y);
+    const n = this.tileExtend(i, o), r = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(r), m = this.map.pointToPixel(h);
+    this.canvasContext.drawImage(e, c.x, c.y, m.x - c.x, m.y - c.y);
   }
   drawTile(e, i, o) {
     const n = this._tileBuffer.find((r) => r.id === `${this.zoom}-${i}-${o}`);
@@ -260,7 +260,7 @@ class y extends w {
     }
   }
 }
-class L extends w {
+class v extends w {
   constructor(e) {
     super(e.id);
     s(this, "_markers", []);
@@ -285,11 +285,11 @@ class L extends w {
     throw new Error("Radius should end with 'px' or 'm'");
   }
   drawMarker(e) {
-    const i = this.map.projection.project(e.center), o = this.map.pointToPixel(i), n = e.radius, r = this.getRadiusPixels(n), h = this.canvasContext;
-    h.beginPath(), h.arc(o.x, o.y, r, 0, 2 * Math.PI, !1), h.fillStyle = e.fillColor, h.fill(), h.lineWidth = 5, h.strokeStyle = e.borderColor, h.stroke();
+    const i = e.radius || "10px", o = e.fillColor || "darkblue", n = e.borderColor || "white", r = this.map.projection.project(e.center), h = this.map.pointToPixel(r), c = this.getRadiusPixels(i), m = this.canvasContext;
+    m.beginPath(), m.arc(h.x, h.y, c, 0, 2 * Math.PI, !1), m.fillStyle = o, m.fill(), m.lineWidth = 5, m.strokeStyle = n, m.stroke();
   }
 }
-class v {
+class L {
   constructor() {
     s(this, "map");
     s(this, "mapRect");
@@ -346,14 +346,16 @@ class E {
     this.map = t, this.map && this.map.element.addEventListener("wheel", this.scroll);
   }
   scroll(t) {
-    t.preventDefault(), t.deltaY > 0 && this.map.zoom - 1 > this.minZoom ? this.map.zoom = this.map.zoom - 1 : t.deltaY < 0 && this.map.zoom + 1 < this.maxZoom && (this.map.zoom = this.map.zoom + 1);
+    t.preventDefault();
+    const e = t.deltaY > 0 ? -1 : 1, i = this.map.zoom + e;
+    i >= this.minZoom && i <= this.maxZoom && (this.map.zoom = i);
   }
 }
 export {
   p as LatLon,
   b as Map,
-  L as MarkerLayer,
-  v as Pan,
+  v as MarkerLayer,
+  L as Pan,
   l as Point,
   y as TileLayer,
   E as Zoom
