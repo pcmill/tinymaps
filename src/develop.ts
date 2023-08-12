@@ -25,10 +25,13 @@ const markers = new MarkerLayer({
     id: 'markers',
     markers: [
         {
-            center: new LatLon(52.08, 5.12),
-            borderColor: 'white',
-            fillColor: 'darkblue',
-            radius: '10px',
+            center: new LatLon(52.0906, 5.1213),
+        }, 
+        {
+            center: new LatLon(48.858, 2.294),
+        },
+        {
+            center: new LatLon(50.8478, 4.3601),
         }
     ]
 });

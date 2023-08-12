@@ -51,18 +51,23 @@ export class MarkerLayer extends Layer {
     }
 
     private drawMarker(marker: Marker) {
+        const radius = marker.radius || '10px';
+        const fillColor = marker.fillColor || 'darkblue';
+        const borderColor = marker.borderColor || 'white';
+
         const center = this.map!.projection.project(marker.center);
         const pixelCoordinates = this.map!.pointToPixel(center);
-        const radius = marker.radius;
         const radiusPixels = this.getRadiusPixels(radius);
 
         const ctx = this.canvasContext!;
         ctx.beginPath();
         ctx.arc(pixelCoordinates.x, pixelCoordinates.y, radiusPixels, 0, 2 * Math.PI, false);
-        ctx.fillStyle = marker.fillColor;
+
+        ctx.fillStyle = fillColor;
         ctx.fill();
+
         ctx.lineWidth = 5;
-        ctx.strokeStyle = marker.borderColor;
+        ctx.strokeStyle = borderColor;
         ctx.stroke();
     }
 }

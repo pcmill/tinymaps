@@ -8,7 +8,7 @@ export type MarkerLayerOptions = {
 
 export type Marker = {
     center: LatLon;
-    borderColor: string;
-    fillColor: string;
-    radius: string;
+    borderColor?: string;
+    fillColor?: string;
+    radius?: string;
 }

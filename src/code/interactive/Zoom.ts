@@ -46,10 +46,11 @@ export class Zoom implements Interactive {
     private scroll(event: WheelEvent) {
         event.preventDefault();
 
-        if (event.deltaY > 0 && this.map!.zoom - 1 > this.minZoom) {
-            this.map!.zoom = this.map!.zoom - 1;
-        } else if (event.deltaY < 0 && this.map!.zoom + 1 < this.maxZoom) {
-            this.map!.zoom = this.map!.zoom + 1;
+        const zoomChange = event.deltaY > 0 ? -1 : 1;
+        const newZoom = this.map!.zoom + zoomChange;
+
+        if (newZoom >= this.minZoom && newZoom <= this.maxZoom) {
+            this.map!.zoom = newZoom;
         }
     }
 }
