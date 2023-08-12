@@ -48,8 +48,7 @@ This library is still in development.
 
 Next goals:
 
-- Mobile zooming and panning
-- Marker layer
+- Mobile zooming (pinch to zoom)
 - Zooming should take cursor placement in mind
 - Better handling of the map edges
 - Tile buffer purging

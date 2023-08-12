@@ -19,9 +19,9 @@ export class TileLayer extends Layer {
         this._attribution = tileLayerOptions.attribution || "";
     }
     
-    setMap(map: Map) {
-        super.setMap(map);
-        
+    addLayer(map: Map) {
+        super.addLayer(map);
+
         if (this.map) {
             this.drawTiles();
 
@@ -29,6 +29,12 @@ export class TileLayer extends Layer {
                 this.map.addAttribution(this._attribution);
             }
         }
+    }
+
+    removeLayer() {
+        super.removeLayer();
+
+        this._tileBuffer = [];
     }
 
     // TODO: purge the tileBuffer when the map is panned or zoomed

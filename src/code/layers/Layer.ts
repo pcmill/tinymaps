@@ -25,9 +25,10 @@ export class Layer {
 
     update(): void {
         this.zoom = this.map!.zoom;
+        this.canvasContext!.clearRect(0, 0, this.map!.width, this.map!.height);
     }
 
-    setMap(map: Map) {
+    addLayer(map: Map) {
         if (!map) throw new Error('Map is required');
 
         this.map = map;
@@ -40,5 +41,14 @@ export class Layer {
         this.canvas.height = map.height;
         this.canvasContext = this.canvas.getContext('2d');
         this.zoom = map.zoom;
+    }
+
+    removeLayer() {
+        if (!this.map) throw new Error('Map is not set');
+
+        this.map.element.removeChild(this.canvas!);
+        this.map = null;
+        this.canvas = null;
+        this.canvasContext = null;
     }
 }

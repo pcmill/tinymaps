@@ -154,7 +154,7 @@ export class Map {
 
     // Adding a layer to the map
     add(layer: Layer) {
-        layer.setMap(this);
+        layer.addLayer(this);
 
         this.layers.push(layer);
     }

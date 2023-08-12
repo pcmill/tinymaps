@@ -1,4 +1,5 @@
 #map {
+    display: flex;
     width: 500px;
     height: 500px;
     background-color: #ccc;
@@ -7,7 +8,13 @@
     touch-action: none;
 }
 
-.attribution {
+#map > canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#map > .attribution {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -20,6 +27,6 @@
     opacity: .85;
 }
 
-.attribution a {
+#map > .attribution > a {
     color: #333;
 }

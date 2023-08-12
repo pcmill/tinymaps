@@ -1,4 +1,4 @@
-import { Map, LatLon, TileLayer, Pan, Zoom } from './main.ts';
+import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer } from './main.ts';
 
 const map = new Map({
     elementId: 'map',
@@ -20,3 +20,17 @@ map.attach(pan);
 
 const zoom = new Zoom();
 map.attach(zoom);
+
+const markers = new MarkerLayer({
+    id: 'markers',
+    markers: [
+        {
+            center: new LatLon(52.08, 5.12),
+            borderColor: 'white',
+            fillColor: 'darkblue',
+            radius: '10px',
+        }
+    ]
+});
+
+map.add(markers);
