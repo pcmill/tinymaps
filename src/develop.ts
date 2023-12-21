@@ -1,3 +1,4 @@
+import { LineLayer } from './code/layers/LineLayer.ts';
 import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer } from './main.ts';
 
 const map = new Map({
@@ -21,12 +22,31 @@ map.attach(pan);
 const zoom = new Zoom();
 map.attach(zoom);
 
+const coordinates = new LineLayer({
+    id: 'coordinates',
+    width: 3,
+    fillColor: 'darkblue',
+    coordinates: [
+        {
+            center: new LatLon(52.0906, 5.1213),
+        },
+        {
+            center: new LatLon(50.8478, 4.3601),
+        },
+        {
+            center: new LatLon(48.858, 2.294),
+        }
+    ]
+});
+
+map.add(coordinates);
+
 const markers = new MarkerLayer({
     id: 'markers',
     markers: [
         {
             center: new LatLon(52.0906, 5.1213),
-        }, 
+        },
         {
             center: new LatLon(48.858, 2.294),
         },
