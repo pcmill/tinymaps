@@ -51,12 +51,22 @@ class g {
   }
 }
 class M extends g {
+  /**
+   * Projects a latitude and longitude to a point on a 2D plane
+   * @param {LatLon} latlon
+   * @returns {Point} Point
+   */
   project(t) {
     if (!t)
       throw new Error("LatLon is required in projection");
     const e = 6378137, i = Math.PI / 180, o = 85.0511287798, n = Math.max(Math.min(t.latitude, o), -o), r = Math.sin(n * i), h = e * t.longitude * i, c = e * Math.log((1 + r) / (1 - r)) / 2;
     return new l(h, c);
   }
+  /**
+   * Unprojects a point on a 2D plane to a latitude and longitude
+   * @param {Point} point
+   * @returns {LatLon} LatLon
+   */
   unproject(t) {
     if (!t)
       throw new Error("Point is required in unprojection");
