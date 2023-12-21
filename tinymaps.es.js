@@ -5,6 +5,12 @@ class _ {
   constructor(t, e) {
     s(this, "topLeft");
     s(this, "bottomRight");
+    if (!t)
+      throw new Error("Top left point is required in bounds");
+    if (!e)
+      throw new Error("Bottom right point is required in bounds");
+    if (t.x > e.x)
+      throw new Error("Top left x must be less than bottom right x");
     this.topLeft = t, this.bottomRight = e;
   }
 }
@@ -299,7 +305,7 @@ class v extends w {
     m.beginPath(), m.arc(h.x, h.y, c, 0, 2 * Math.PI, !1), m.fillStyle = o, m.fill(), m.lineWidth = 5, m.strokeStyle = n, m.stroke();
   }
 }
-class L {
+class E {
   constructor() {
     s(this, "map");
     s(this, "mapRect");
@@ -335,7 +341,7 @@ class L {
     this.isPanning && (this.isPanning = !1, this.map.element.releasePointerCapture(t.pointerId), this.map.element.removeEventListener("pointerup", this.pointerUp), this.map.element.removeEventListener("pointermove", this.pointerMove));
   }
 }
-class E {
+class L {
   constructor(t) {
     s(this, "map");
     s(this, "minZoom");
@@ -365,8 +371,8 @@ export {
   p as LatLon,
   b as Map,
   v as MarkerLayer,
-  L as Pan,
+  E as Pan,
   l as Point,
   y as TileLayer,
-  E as Zoom
+  L as Zoom
 };
