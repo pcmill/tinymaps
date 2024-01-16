@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tinymaps</title>
   </head>
@@ -14,9 +15,10 @@
 
         <h2>Static map</h2>
         <div class="map" id="mapStatic"></div>
-    </main>
+        <p>This map is not interactive, but it is also smaller in size.</p>
 
-    <a href="https://github.com/pcmill/tinymaps">Github repository</a>
+        <a href="https://github.com/pcmill/tinymaps">Github repository</a>
+    </main>
 
     <script type="module">
         import { Map, LatLon, TileLayer, MarkerLayer, Pan, Zoom, LineLayer } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
@@ -107,6 +109,7 @@
         max-width: 900px;
         width: 100%;
         margin: 0 auto;
+        margin-bottom: 2rem;
       }
 
       main h1 {
@@ -114,11 +117,16 @@
         margin: 2rem 0 1rem 0;
       }
 
-      main h2 {
+      main h2,
+      main p {
         font-family: Superclarendon, "Bookman Old Style", "URW Bookman",
           "URW Bookman L", "Georgia Pro", Georgia, serif;
         font-weight: normal;
         margin: 1rem 0 0.5rem 0;
+      }
+
+      main a {
+        margin-top: 1rem;
       }
 
       .map {
