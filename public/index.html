@@ -1,14 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tinymaps</title>
-</head>
-<body>
-    <h1>Welcome to tinymaps</h1>
+  </head>
+  <body>
+    <main>
+        <h1>Tinymaps examples</h1>
 
-    <a href="basic">Basic example</a>
+        <h2>Interactive map</h2>
+        <div class="map" id="mapInteractive"></div>
+
+        <h2>Static map</h2>
+        <div class="map" id="mapStatic"></div>
+    </main>
+
     <a href="https://github.com/pcmill/tinymaps">Github repository</a>
-</body>
+
+    <script type="module">
+        import { Map, LatLon, TileLayer, MarkerLayer, Pan, Zoom, LineLayer } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
+
+        const mapInteractive = new Map({
+            elementId: 'mapInteractive',
+            center: new LatLon(52.08, 5.12),
+            zoom: 11,
+        });
+
+        const tilelayer = new TileLayer({
+            id: 'tiles',
+            tileSize: 256,
+            tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+        });
+
+        mapInteractive.add(tilelayer);
+
+        const pan = new Pan();
+        mapInteractive.attach(pan);
+
+        const zoom = new Zoom();
+        mapInteractive.attach(zoom);
+
+        const coordinates = new LineLayer({
+            id: 'coordinates',
+            width: 3,
+            fillColor: 'darkblue',
+            coordinates: [
+                {
+                    center: new LatLon(52.0906, 5.1213),
+                },
+                {
+                    center: new LatLon(50.8478, 4.3601),
+                },
+                {
+                    center: new LatLon(48.858, 2.294),
+                }
+            ]
+        });
+
+        mapInteractive.add(coordinates);
+
+        const markers = new MarkerLayer({
+            id: 'markers',
+            markers: [
+                {
+                    center: new LatLon(52.0906, 5.1213),
+                },
+                {
+                    center: new LatLon(48.858, 2.294),
+                },
+                {
+                    center: new LatLon(50.8478, 4.3601),
+                }
+            ]
+        });
+
+        mapInteractive.add(markers);
+
+        const mapStatic = new Map({
+            elementId: 'mapStatic',
+            center: new LatLon(-34.5473761, 146.565348),
+            zoom: 10,
+        });
+
+        const satelliteLayer = new TileLayer({
+            id: 'satellite',
+            tileSize: 256,
+            tileUrl: 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
+            attribution: '© Maptiler',
+        });
+
+        mapStatic.add(satelliteLayer);
+    </script>
+
+    <style>
+      body {
+        font-family: Bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
+          "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+        font-weight: normal;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      main h1 {
+        text-transform: uppercase;
+        margin: 2rem 0 1rem 0;
+      }
+
+      main h2 {
+        font-family: Superclarendon, "Bookman Old Style", "URW Bookman",
+          "URW Bookman L", "Georgia Pro", Georgia, serif;
+        font-weight: normal;
+        margin: 1rem 0 0.5rem 0;
+      }
+
+      .map {
+        width: 100%;
+        height: 500px;
+        border-radius: 5px;
+      }
+
+      .map {
+        display: flex;
+        background-color: #ccc;
+        overflow: hidden;
+        position: relative;
+        touch-action: none;
+      }
+
+      .map > canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .map > .attribution {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 0.4rem 0.6rem;
+        font-family: sans-serif;
+        font-size: 0.8rem;
+        background-color: white;
+        color: #333;
+        border-radius: 0.8rem 0 0 0;
+        opacity: 0.85;
+      }
+
+      .map > .attribution > a {
+        color: #333;
+      }
+    </style>
+  </body>
 </html>

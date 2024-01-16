@@ -1,8 +1,8 @@
 import { LineLayer } from './code/layers/LineLayer.ts';
 import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer } from './main.ts';
 
-const map = new Map({
-    elementId: 'map',
+const mapInteractive = new Map({
+    elementId: 'mapInteractive',
     center: new LatLon(52.08, 5.12),
     zoom: 11,
 });
@@ -14,13 +14,13 @@ const tilelayer = new TileLayer({
     attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
 });
 
-map.add(tilelayer);
+mapInteractive.add(tilelayer);
 
 const pan = new Pan();
-map.attach(pan);
+mapInteractive.attach(pan);
 
 const zoom = new Zoom();
-map.attach(zoom);
+mapInteractive.attach(zoom);
 
 const coordinates = new LineLayer({
     id: 'coordinates',
@@ -39,7 +39,7 @@ const coordinates = new LineLayer({
     ]
 });
 
-map.add(coordinates);
+mapInteractive.add(coordinates);
 
 const markers = new MarkerLayer({
     id: 'markers',
@@ -56,4 +56,19 @@ const markers = new MarkerLayer({
     ]
 });
 
-map.add(markers);
+mapInteractive.add(markers);
+
+const mapStatic = new Map({
+    elementId: 'mapStatic',
+    center: new LatLon(-34.5473761, 146.565348),
+    zoom: 10,
+});
+
+const satelliteLayer = new TileLayer({
+    id: 'satellite',
+    tileSize: 256,
+    tileUrl: 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
+    attribution: '© Maptiler',
+});
+
+mapStatic.add(satelliteLayer);
