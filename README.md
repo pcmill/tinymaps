@@ -51,4 +51,3 @@ Next goals:
 - Mobile zooming (pinch to zoom)
 - Zooming should take cursor placement in mind
 - Better handling of the map edges
-- Tile buffer purging
