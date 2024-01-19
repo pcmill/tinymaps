@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tinymaps</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <main>
         <h1>Tinymaps examples</h1>
 
@@ -17,11 +19,15 @@
         <div class="map" id="mapStatic"></div>
         <p>This map is not interactive, but it is also smaller in size.</p>
 
+        <h2>Image map</h2>
+        <div class="map" id="mapImage"></div>
+        <p>Map taken from <a href="https://hetutrechtsarchief.nl/beeld/1A9A48886348537995AE434DAB2E7D43">Het Utrechts Archief</a>, public domain.</p>
+
         <a href="https://github.com/pcmill/tinymaps">Github repository</a>
     </main>
 
     <script type="module">
-        import { Map, LatLon, TileLayer, MarkerLayer, Pan, Zoom, LineLayer } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
+        import { Map, LatLon, TileLayer, MarkerLayer, Pan, Zoom, LineLayer, ImageLayer } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
 
         const mapInteractive = new Map({
             elementId: 'mapInteractive',
@@ -94,80 +100,102 @@
         });
 
         mapStatic.add(satelliteLayer);
+
+        const mapImage = new Map({
+            elementId: 'mapImage',
+            center: new LatLon(52.08, 5.12),
+            zoom: 11,
+        });
+
+        const imageLayer = new ImageLayer({
+            id: 'image',
+            opacity: 0.65,
+            imageUrl: 'https://pub-e3800c93ea204b7d96232b54c15f1b11.r2.dev/map-utrecht.jpg',
+            bounds: new BoundingBox(
+                new LatLon(52.1294, 5.0279839),
+                new LatLon(52.05064, 5.1834883)
+            )
+        });
+
+        mapImage.add(tilelayer);
+        mapImage.add(imageLayer);
+        mapImage.attach(pan);
+        mapImage.attach(zoom);
     </script>
 
     <style>
-      body {
-        font-family: Bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
-          "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
-        font-weight: normal;
-      }
+        body {
+            font-family: Bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
+                "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+            font-weight: normal;
+        }
 
-      main {
-        display: flex;
-        flex-direction: column;
-        max-width: 900px;
-        width: 100%;
-        margin: 0 auto;
-        margin-bottom: 2rem;
-      }
+        main {
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            margin-bottom: 2rem;
+        }
 
-      main h1 {
-        text-transform: uppercase;
-        margin: 2rem 0 1rem 0;
-      }
+        main h1 {
+            text-transform: uppercase;
+            margin: 2rem 0 1rem 0;
+        }
 
-      main h2,
-      main p {
-        font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
-        font-weight: normal;
-        margin: 1rem 0 0.5rem 0;
-      }
+        main h2,
+        main p {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-weight: normal;
+            margin: 1rem 0 0.5rem 0;
+        }
 
-      main p {
-        font-size: 1.2rem;
-      }
+        main p {
+            font-size: 1.2rem;
+        }
 
-      main a {
-        margin-top: 1rem;
-      }
+        main a {
+            margin-top: 1rem;
+        }
 
-      .map {
-        width: 100%;
-        height: 500px;
-        border-radius: 5px;
-      }
+        .map {
+            width: 100%;
+            height: 500px;
+            border-radius: 5px;
+        }
 
-      .map {
-        display: flex;
-        background-color: #ccc;
-        overflow: hidden;
-        position: relative;
-        touch-action: none;
-      }
+        .map {
+            display: flex;
+            background-color: #ccc;
+            overflow: hidden;
+            position: relative;
+            touch-action: none;
+        }
 
-      .map > canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
+        .map>canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
-      .map > .attribution {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        padding: 0.4rem 0.6rem;
-        font-family: sans-serif;
-        font-size: 0.8rem;
-        background-color: white;
-        color: #333;
-        border-radius: 0.8rem 0 0 0;
-        opacity: 0.85;
-      }
+        .map>.attribution {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0.4rem 0.6rem;
+            font-family: sans-serif;
+            font-size: 0.8rem;
+            background-color: white;
+            color: #333;
+            border-radius: 0.8rem 0 0 0;
+            opacity: 0.85;
+        }
 
-      .map > .attribution > a {
-        color: #333;
-      }
+        .map>.attribution>a {
+            color: #333;
+        }
     </style>
-  </body>
+</body>
+
 </html>

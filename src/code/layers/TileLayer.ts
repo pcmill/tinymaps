@@ -18,7 +18,7 @@ export class TileLayer extends Layer {
         this._tileUrl = tileLayerOptions.tileUrl;
         this._attribution = tileLayerOptions.attribution || "";
     }
-    
+
     addLayer(map: Map) {
         super.addLayer(map);
 

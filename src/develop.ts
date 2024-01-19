@@ -1,5 +1,4 @@
-import { LineLayer } from './code/layers/LineLayer.ts';
-import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer } from './main.ts';
+import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer, ImageLayer, BoundingBox, LineLayer } from './main.ts';
 
 const mapInteractive = new Map({
     elementId: 'mapInteractive',
@@ -72,3 +71,24 @@ const satelliteLayer = new TileLayer({
 });
 
 mapStatic.add(satelliteLayer);
+
+const mapImage = new Map({
+    elementId: 'mapImage',
+    center: new LatLon(52.08, 5.12),
+    zoom: 11,
+});
+
+const imageLayer = new ImageLayer({
+    id: 'image',
+    opacity: 0.65,
+    imageUrl: 'https://pub-e3800c93ea204b7d96232b54c15f1b11.r2.dev/map-utrecht.jpg',
+    bounds: new BoundingBox(
+        new LatLon(52.1294, 5.0279839),
+        new LatLon(52.05064, 5.1834883)
+    )
+});
+
+mapImage.add(tilelayer);
+mapImage.add(imageLayer);
+mapImage.attach(pan);
+mapImage.attach(zoom);
