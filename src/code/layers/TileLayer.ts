@@ -1,15 +1,15 @@
 import { TileLayerOptions } from "../../models/TileLayerOptions";
-import { TileBuffer } from "../../models/TileBuffer";
 import { Map } from "../Map";
 import { Layer } from "./Layer";
 import { Point } from "../Point";
 import { isEmpty } from "../../helpers/util";
+import { TileBuffer } from "./TileBuffer";
 
 export class TileLayer extends Layer {
     _tileUrl: string;
     _tileSize: number;
     _attribution: string;
-    _tileBuffer: TileBuffer[] = [];
+    _tileBuffer = new TileBuffer();
 
     constructor(tileLayerOptions: TileLayerOptions) {
         super(tileLayerOptions.id);
@@ -34,7 +34,7 @@ export class TileLayer extends Layer {
     removeLayer() {
         super.removeLayer();
 
-        this._tileBuffer = [];
+        this._tileBuffer.clear();
     }
 
     // TODO: purge the tileBuffer when the map is panned or zoomed
@@ -118,7 +118,7 @@ export class TileLayer extends Layer {
     }
 
     private drawTile(tileUrl: string, x: number, y: number) {
-        const tile = this._tileBuffer.find(tile => tile.id === `${this.zoom}-${x}-${y}`);
+        const tile = this._tileBuffer.get(`${this.zoom}-${x}-${y}`);
 
         if (tile) {
             this.drawTileOnCanvas(tile.image, x, y);
@@ -127,9 +127,9 @@ export class TileLayer extends Layer {
             const img = new Image();
             img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS
             img.src = tileUrl;
-    
+
             img.onload = () => {
-                this._tileBuffer.push({
+                this._tileBuffer.add({
                     id: `${this.zoom}-${x}-${y}`,
                     image: img
                 });
