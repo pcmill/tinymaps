@@ -1,7 +1,7 @@
 var f = Object.defineProperty;
-var x = (a, t, e) => t in a ? f(a, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : a[t] = e;
-var o = (a, t, e) => (x(a, typeof t != "symbol" ? t + "" : t, e), e);
-class _ {
+var _ = (r, t, e) => t in r ? f(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var o = (r, t, e) => (_(r, typeof t != "symbol" ? t + "" : t, e), e);
+class x {
   constructor(t, e) {
     o(this, "topLeft");
     o(this, "bottomRight");
@@ -14,11 +14,11 @@ class _ {
     this.topLeft = t, this.bottomRight = e;
   }
 }
-function m(a) {
-  return a == null;
+function m(r) {
+  return r == null;
 }
-function u(a) {
-  return typeof a != "number" || isNaN(a);
+function u(r) {
+  return typeof r != "number" || isNaN(r);
 }
 class l {
   constructor(t, e) {
@@ -65,7 +65,7 @@ class M extends g {
   project(t) {
     if (!t)
       throw new Error("LatLon is required in projection");
-    const e = 6378137, i = Math.PI / 180, s = 85.0511287798, n = Math.max(Math.min(t.latitude, s), -s), r = Math.sin(n * i), h = e * t.longitude * i, c = e * Math.log((1 + r) / (1 - r)) / 2;
+    const e = 6378137, i = Math.PI / 180, s = 85.0511287798, n = Math.max(Math.min(t.latitude, s), -s), a = Math.sin(n * i), h = e * t.longitude * i, c = e * Math.log((1 + a) / (1 - a)) / 2;
     return new l(h, c);
   }
   /**
@@ -80,7 +80,7 @@ class M extends g {
     return new w(n, s);
   }
 }
-class b {
+class y {
   constructor(t) {
     o(this, "_center");
     o(this, "_zoom");
@@ -153,8 +153,8 @@ class b {
   }
   // Calculate bounds based on center and zoom and on size of element
   calculateBounds() {
-    const t = this.calculateResolution(), e = this._width / 2 * t, i = this._height / 2 * t, s = this._center.x - e, n = this._center.y - i, r = this._center.x + e, h = this._center.y + i;
-    return new _(new l(s, h), new l(r, n));
+    const t = this.calculateResolution(), e = this._width / 2 * t, i = this._height / 2 * t, s = this._center.x - e, n = this._center.y - i, a = this._center.x + e, h = this._center.y + i;
+    return new x(new l(s, h), new l(a, n));
   }
   // Adding a layer to the map
   add(t) {
@@ -167,12 +167,12 @@ class b {
     return t * Math.PI / 180;
   }
   pixelToPoint(t) {
-    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = (i.x - e.x) / this._width, n = (e.y - i.y) / this._height, r = t.x * s + e.x, h = e.y - t.y * n;
-    return new l(r, h);
+    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = (i.x - e.x) / this._width, n = (e.y - i.y) / this._height, a = t.x * s + e.x, h = e.y - t.y * n;
+    return new l(a, h);
   }
   pointToPixel(t) {
-    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = this._width / (i.x - e.x), n = this._height / (e.y - i.y), r = (t.x - e.x) * s, h = (e.y - t.y) * n;
-    return new l(Math.round(r), Math.round(h));
+    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = this._width / (i.x - e.x), n = this._height / (e.y - i.y), a = (t.x - e.x) * s, h = (e.y - t.y) * n;
+    return new l(Math.round(a), Math.round(h));
   }
 }
 class p {
@@ -200,20 +200,36 @@ class p {
     this.map.element.removeChild(this.canvas), this.map = null, this.canvas = null, this.canvasContext = null;
   }
 }
-class y extends p {
+class P {
+  constructor(t = 30) {
+    o(this, "_collection", []);
+    o(this, "_maxAmount", 30);
+    this._maxAmount = t;
+  }
+  get(t) {
+    return this._collection.find((e) => e.id === t);
+  }
+  add(t) {
+    this._collection.length >= this._maxAmount && this._collection.shift(), this._collection.push(t);
+  }
+  clear() {
+    this._collection = [];
+  }
+}
+class L extends p {
   constructor(e) {
     super(e.id);
     o(this, "_tileUrl");
     o(this, "_tileSize");
     o(this, "_attribution");
-    o(this, "_tileBuffer", []);
+    o(this, "_tileBuffer", new P());
     this._tileSize = e.tileSize || 256, this._tileUrl = e.tileUrl, this._attribution = e.attribution || "";
   }
   addLayer(e) {
     super.addLayer(e), this.map && (this.drawTiles(), this._attribution && this.map.addAttribution(this._attribution));
   }
   removeLayer() {
-    super.removeLayer(), this._tileBuffer = [];
+    super.removeLayer(), this._tileBuffer.clear();
   }
   // TODO: purge the tileBuffer when the map is panned or zoomed
   // so the tileBuffer does not grow indefinitely
@@ -232,7 +248,7 @@ class y extends p {
   getTileBounds() {
     if (!this.map)
       throw new Error("Map is not set");
-    const e = Math.pow(2, this.zoom), i = Math.floor((this.map.bounds.topLeft.x + 2003750834e-2) / (2 * 2003750834e-2) * e), s = Math.floor((this.map.bounds.bottomRight.x + 2003750834e-2) / (2 * 2003750834e-2) * e), n = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI), r = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI), h = Math.floor((1 - Math.log(Math.tan(n * Math.PI / 180) + 1 / Math.cos(n * Math.PI / 180)) / Math.PI) / 2 * e), c = Math.floor((1 - Math.log(Math.tan(r * Math.PI / 180) + 1 / Math.cos(r * Math.PI / 180)) / Math.PI) / 2 * e);
+    const e = Math.pow(2, this.zoom), i = Math.floor((this.map.bounds.topLeft.x + 2003750834e-2) / (2 * 2003750834e-2) * e), s = Math.floor((this.map.bounds.bottomRight.x + 2003750834e-2) / (2 * 2003750834e-2) * e), n = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI), a = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI), h = Math.floor((1 - Math.log(Math.tan(n * Math.PI / 180) + 1 / Math.cos(n * Math.PI / 180)) / Math.PI) / 2 * e), c = Math.floor((1 - Math.log(Math.tan(a * Math.PI / 180) + 1 / Math.cos(a * Math.PI / 180)) / Math.PI) / 2 * e);
     return [
       Math.max(0, i),
       Math.max(0, s),
@@ -257,26 +273,26 @@ class y extends p {
   drawTileOnCanvas(e, i, s) {
     if (!this.map || !this.canvasContext)
       return;
-    const n = this.tileExtend(i, s), r = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(r), d = this.map.pointToPixel(h);
+    const n = this.tileExtend(i, s), a = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(a), d = this.map.pointToPixel(h);
     this.canvasContext.drawImage(e, c.x, c.y, d.x - c.x, d.y - c.y);
   }
   drawTile(e, i, s) {
-    const n = this._tileBuffer.find((r) => r.id === `${this.zoom}-${i}-${s}`);
+    const n = this._tileBuffer.get(`${this.zoom}-${i}-${s}`);
     if (n) {
       this.drawTileOnCanvas(n.image, i, s);
       return;
     } else {
-      const r = new Image();
-      r.crossOrigin = "anonymous", r.src = e, r.onload = () => {
-        this._tileBuffer.push({
+      const a = new Image();
+      a.crossOrigin = "anonymous", a.src = e, a.onload = () => {
+        this._tileBuffer.add({
           id: `${this.zoom}-${i}-${s}`,
-          image: r
-        }), this.drawTileOnCanvas(r, i, s);
+          image: a
+        }), this.drawTileOnCanvas(a, i, s);
       };
     }
   }
 }
-class L extends p {
+class v extends p {
   constructor(e) {
     super(e.id);
     o(this, "_markers", []);
@@ -301,11 +317,11 @@ class L extends p {
     throw new Error("Radius should end with 'px' or 'm'");
   }
   drawMarker(e) {
-    const i = e.radius || "10px", s = e.fillColor || "darkblue", n = e.borderColor || "white", r = this.map.projection.project(e.center), h = this.map.pointToPixel(r), c = this.getRadiusPixels(i), d = this.canvasContext;
+    const i = e.radius || "10px", s = e.fillColor || "darkblue", n = e.borderColor || "white", a = this.map.projection.project(e.center), h = this.map.pointToPixel(a), c = this.getRadiusPixels(i), d = this.canvasContext;
     d.beginPath(), d.arc(h.x, h.y, c, 0, 2 * Math.PI, !1), d.fillStyle = s, d.fill(), d.lineWidth = 5, d.strokeStyle = n, d.stroke();
   }
 }
-class v extends p {
+class E extends p {
   constructor(e) {
     super(e.id);
     o(this, "_coordinates", []);
@@ -326,13 +342,13 @@ class v extends p {
     const i = this.canvasContext;
     i.strokeStyle = this._fillColor, i.lineWidth = this._width, i.beginPath();
     for (const s of e) {
-      const n = this.map.projection.project(s.center), r = this.map.pointToPixel(n);
-      i.lineTo(r.x, r.y);
+      const n = this.map.projection.project(s.center), a = this.map.pointToPixel(n);
+      i.lineTo(a.x, a.y);
     }
     i.stroke();
   }
 }
-class E {
+class z {
   constructor() {
     o(this, "map");
     o(this, "mapRect");
@@ -368,7 +384,7 @@ class E {
     this.isPanning && (this.isPanning = !1, this.map.element.releasePointerCapture(t.pointerId), this.map.element.removeEventListener("pointerup", this.pointerUp), this.map.element.removeEventListener("pointermove", this.pointerMove));
   }
 }
-class z {
+class C {
   constructor(t) {
     o(this, "map");
     o(this, "minZoom");
@@ -396,11 +412,11 @@ class z {
 }
 export {
   w as LatLon,
-  v as LineLayer,
-  b as Map,
-  L as MarkerLayer,
-  E as Pan,
+  E as LineLayer,
+  y as Map,
+  v as MarkerLayer,
+  z as Pan,
   l as Point,
-  y as TileLayer,
-  z as Zoom
+  L as TileLayer,
+  C as Zoom
 };
