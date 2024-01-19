@@ -66,8 +66,8 @@ const mapStatic = new Map({
 
 const satelliteLayer = new TileLayer({
     id: 'satellite',
-    tileSize: 256,
-    tileUrl: 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
+    tileSize: 512,
+    tileUrl: 'https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
     attribution: '© Maptiler',
 });
 

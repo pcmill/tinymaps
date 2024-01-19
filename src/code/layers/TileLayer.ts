@@ -89,15 +89,17 @@ export class TileLayer extends Layer {
     }
 
     private tileExtend(x: number, y: number): number[] {
+        const halfEarthCircumference = 20037508.34;
+
         // Calculate the resolution for the given zoom level
-        const resolution = 156543.03392804097 / Math.pow(2, this.zoom);
+        const resolution = (halfEarthCircumference / this._tileSize / 0.5) / Math.pow(2, this.zoom);
 
         // Calculate the extent of the tile in Web Mercator coordinates
         const extent = [
-          x * this._tileSize * resolution - 20037508.34,
-          20037508.34 - y * this._tileSize * resolution,
-          (x + 1) * this._tileSize * resolution - 20037508.34,
-          20037508.34 - (y + 1) * this._tileSize * resolution,
+          x * this._tileSize * resolution - halfEarthCircumference,
+          halfEarthCircumference - y * this._tileSize * resolution,
+          (x + 1) * this._tileSize * resolution - halfEarthCircumference,
+          halfEarthCircumference - (y + 1) * this._tileSize * resolution,
         ];
 
         return extent;
@@ -125,7 +127,7 @@ export class TileLayer extends Layer {
             return;
         } else {
             const img = new Image();
-            img.crossOrigin = 'anonymous'; // Use this if the tile server requires CORS
+            img.crossOrigin = 'anonymous';
             img.src = tileUrl;
 
             img.onload = () => {
@@ -133,7 +135,7 @@ export class TileLayer extends Layer {
                     id: `${this.zoom}-${x}-${y}`,
                     image: img
                 });
-    
+
                 this.drawTileOnCanvas(img, x, y);
             };
         }
