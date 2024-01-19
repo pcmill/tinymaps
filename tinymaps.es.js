@@ -1,6 +1,6 @@
 var f = Object.defineProperty;
-var _ = (r, t, e) => t in r ? f(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var o = (r, t, e) => (_(r, typeof t != "symbol" ? t + "" : t, e), e);
+var _ = (a, t, e) => t in a ? f(a, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : a[t] = e;
+var o = (a, t, e) => (_(a, typeof t != "symbol" ? t + "" : t, e), e);
 class x {
   constructor(t, e) {
     o(this, "topLeft");
@@ -14,11 +14,11 @@ class x {
     this.topLeft = t, this.bottomRight = e;
   }
 }
-function m(r) {
-  return r == null;
+function d(a) {
+  return a == null;
 }
-function u(r) {
-  return typeof r != "number" || isNaN(r);
+function u(a) {
+  return typeof a != "number" || isNaN(a);
 }
 class l {
   constructor(t, e) {
@@ -33,7 +33,7 @@ class w {
   constructor(t, e) {
     o(this, "latitude");
     o(this, "longitude");
-    if (m(t) || m(e))
+    if (d(t) || d(e))
       throw new Error("Latitude and longitude must be provided");
     if (u(t) || u(e))
       throw new Error("Latitude and longitude must be numbers");
@@ -65,7 +65,7 @@ class M extends g {
   project(t) {
     if (!t)
       throw new Error("LatLon is required in projection");
-    const e = 6378137, i = Math.PI / 180, s = 85.0511287798, n = Math.max(Math.min(t.latitude, s), -s), a = Math.sin(n * i), h = e * t.longitude * i, c = e * Math.log((1 + a) / (1 - a)) / 2;
+    const e = 6378137, i = Math.PI / 180, s = 85.0511287798, n = Math.max(Math.min(t.latitude, s), -s), r = Math.sin(n * i), h = e * t.longitude * i, c = e * Math.log((1 + r) / (1 - r)) / 2;
     return new l(h, c);
   }
   /**
@@ -153,8 +153,8 @@ class y {
   }
   // Calculate bounds based on center and zoom and on size of element
   calculateBounds() {
-    const t = this.calculateResolution(), e = this._width / 2 * t, i = this._height / 2 * t, s = this._center.x - e, n = this._center.y - i, a = this._center.x + e, h = this._center.y + i;
-    return new x(new l(s, h), new l(a, n));
+    const t = this.calculateResolution(), e = this._width / 2 * t, i = this._height / 2 * t, s = this._center.x - e, n = this._center.y - i, r = this._center.x + e, h = this._center.y + i;
+    return new x(new l(s, h), new l(r, n));
   }
   // Adding a layer to the map
   add(t) {
@@ -167,12 +167,12 @@ class y {
     return t * Math.PI / 180;
   }
   pixelToPoint(t) {
-    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = (i.x - e.x) / this._width, n = (e.y - i.y) / this._height, a = t.x * s + e.x, h = e.y - t.y * n;
-    return new l(a, h);
+    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = (i.x - e.x) / this._width, n = (e.y - i.y) / this._height, r = t.x * s + e.x, h = e.y - t.y * n;
+    return new l(r, h);
   }
   pointToPixel(t) {
-    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = this._width / (i.x - e.x), n = this._height / (e.y - i.y), a = (t.x - e.x) * s, h = (e.y - t.y) * n;
-    return new l(Math.round(a), Math.round(h));
+    const e = this._mapBounds.topLeft, i = this._mapBounds.bottomRight, s = this._width / (i.x - e.x), n = this._height / (e.y - i.y), r = (t.x - e.x) * s, h = (e.y - t.y) * n;
+    return new l(Math.round(r), Math.round(h));
   }
 }
 class p {
@@ -182,7 +182,7 @@ class p {
     o(this, "canvasContext");
     o(this, "zoom");
     o(this, "map");
-    if (m(t))
+    if (d(t))
       throw new Error("Layer id cannot be empty");
     this.id = t, this.zoom = 1, this.map = null, this.canvas = null, this.canvasContext = null;
   }
@@ -248,7 +248,7 @@ class L extends p {
   getTileBounds() {
     if (!this.map)
       throw new Error("Map is not set");
-    const e = Math.pow(2, this.zoom), i = Math.floor((this.map.bounds.topLeft.x + 2003750834e-2) / (2 * 2003750834e-2) * e), s = Math.floor((this.map.bounds.bottomRight.x + 2003750834e-2) / (2 * 2003750834e-2) * e), n = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI), a = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI), h = Math.floor((1 - Math.log(Math.tan(n * Math.PI / 180) + 1 / Math.cos(n * Math.PI / 180)) / Math.PI) / 2 * e), c = Math.floor((1 - Math.log(Math.tan(a * Math.PI / 180) + 1 / Math.cos(a * Math.PI / 180)) / Math.PI) / 2 * e);
+    const e = Math.pow(2, this.zoom), i = Math.floor((this.map.bounds.topLeft.x + 2003750834e-2) / (2 * 2003750834e-2) * e), s = Math.floor((this.map.bounds.bottomRight.x + 2003750834e-2) / (2 * 2003750834e-2) * e), n = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI), r = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI), h = Math.floor((1 - Math.log(Math.tan(n * Math.PI / 180) + 1 / Math.cos(n * Math.PI / 180)) / Math.PI) / 2 * e), c = Math.floor((1 - Math.log(Math.tan(r * Math.PI / 180) + 1 / Math.cos(r * Math.PI / 180)) / Math.PI) / 2 * e);
     return [
       Math.max(0, i),
       Math.max(0, s),
@@ -257,24 +257,24 @@ class L extends p {
     ];
   }
   getTileUrl(e, i, s) {
-    if (m(e) || m(i) || m(s))
+    if (d(e) || d(i) || d(s))
       throw new Error("Invalid tile coordinates");
     return this._tileUrl.replace("{x}", e.toString()).replace("{y}", i.toString()).replace("{z}", s.toString());
   }
   tileExtend(e, i) {
-    const s = 156543.03392804097 / Math.pow(2, this.zoom);
+    const s = 2003750834e-2, n = s / this._tileSize / 0.5 / Math.pow(2, this.zoom);
     return [
-      e * this._tileSize * s - 2003750834e-2,
-      2003750834e-2 - i * this._tileSize * s,
-      (e + 1) * this._tileSize * s - 2003750834e-2,
-      2003750834e-2 - (i + 1) * this._tileSize * s
+      e * this._tileSize * n - s,
+      s - i * this._tileSize * n,
+      (e + 1) * this._tileSize * n - s,
+      s - (i + 1) * this._tileSize * n
     ];
   }
   drawTileOnCanvas(e, i, s) {
     if (!this.map || !this.canvasContext)
       return;
-    const n = this.tileExtend(i, s), a = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(a), d = this.map.pointToPixel(h);
-    this.canvasContext.drawImage(e, c.x, c.y, d.x - c.x, d.y - c.y);
+    const n = this.tileExtend(i, s), r = new l(n[0], n[1]), h = new l(n[2], n[3]), c = this.map.pointToPixel(r), m = this.map.pointToPixel(h);
+    this.canvasContext.drawImage(e, c.x, c.y, m.x - c.x, m.y - c.y);
   }
   drawTile(e, i, s) {
     const n = this._tileBuffer.get(`${this.zoom}-${i}-${s}`);
@@ -282,12 +282,12 @@ class L extends p {
       this.drawTileOnCanvas(n.image, i, s);
       return;
     } else {
-      const a = new Image();
-      a.crossOrigin = "anonymous", a.src = e, a.onload = () => {
+      const r = new Image();
+      r.crossOrigin = "anonymous", r.src = e, r.onload = () => {
         this._tileBuffer.add({
           id: `${this.zoom}-${i}-${s}`,
-          image: a
-        }), this.drawTileOnCanvas(a, i, s);
+          image: r
+        }), this.drawTileOnCanvas(r, i, s);
       };
     }
   }
@@ -317,8 +317,8 @@ class v extends p {
     throw new Error("Radius should end with 'px' or 'm'");
   }
   drawMarker(e) {
-    const i = e.radius || "10px", s = e.fillColor || "darkblue", n = e.borderColor || "white", a = this.map.projection.project(e.center), h = this.map.pointToPixel(a), c = this.getRadiusPixels(i), d = this.canvasContext;
-    d.beginPath(), d.arc(h.x, h.y, c, 0, 2 * Math.PI, !1), d.fillStyle = s, d.fill(), d.lineWidth = 5, d.strokeStyle = n, d.stroke();
+    const i = e.radius || "10px", s = e.fillColor || "darkblue", n = e.borderColor || "white", r = this.map.projection.project(e.center), h = this.map.pointToPixel(r), c = this.getRadiusPixels(i), m = this.canvasContext;
+    m.beginPath(), m.arc(h.x, h.y, c, 0, 2 * Math.PI, !1), m.fillStyle = s, m.fill(), m.lineWidth = 5, m.strokeStyle = n, m.stroke();
   }
 }
 class E extends p {
@@ -342,8 +342,8 @@ class E extends p {
     const i = this.canvasContext;
     i.strokeStyle = this._fillColor, i.lineWidth = this._width, i.beginPath();
     for (const s of e) {
-      const n = this.map.projection.project(s.center), a = this.map.pointToPixel(n);
-      i.lineTo(a.x, a.y);
+      const n = this.map.projection.project(s.center), r = this.map.pointToPixel(n);
+      i.lineTo(r.x, r.y);
     }
     i.stroke();
   }
