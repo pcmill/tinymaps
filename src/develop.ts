@@ -74,9 +74,18 @@ mapStatic.add(satelliteLayer);
 
 const mapImage = new Map({
     elementId: 'mapImage',
-    center: new LatLon(52.08, 5.12),
+    center: new LatLon(52.09, 5.111),
     zoom: 11,
 });
+
+const imageTilelayer = new TileLayer({
+    id: 'tiles',
+    tileSize: 256,
+    tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+});
+
+mapImage.add(imageTilelayer);
 
 const imageLayer = new ImageLayer({
     id: 'image',
@@ -88,7 +97,10 @@ const imageLayer = new ImageLayer({
     )
 });
 
-mapImage.add(tilelayer);
 mapImage.add(imageLayer);
-mapImage.attach(pan);
-mapImage.attach(zoom);
+
+const imagePan = new Pan();
+mapImage.attach(imagePan);
+
+const imageZoom = new Zoom();
+mapImage.attach(imageZoom);
