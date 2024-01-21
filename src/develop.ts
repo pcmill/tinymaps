@@ -59,7 +59,7 @@ mapInteractive.add(markers);
 
 const mapStatic = new Map({
     elementId: 'mapStatic',
-    center: new LatLon(-34.5473761, 146.565348),
+    center: new LatLon(52.08, 5.12),
     zoom: 10,
 });
 
@@ -75,7 +75,7 @@ mapStatic.add(satelliteLayer);
 const mapImage = new Map({
     elementId: 'mapImage',
     center: new LatLon(52.09, 5.111),
-    zoom: 11,
+    zoom: 12,
 });
 
 const imageTilelayer = new TileLayer({

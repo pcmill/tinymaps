@@ -23,6 +23,10 @@ export class TileLayer extends Layer {
         super.addLayer(map);
 
         if (this.map) {
+            this.map.tileSize = this._tileSize;
+
+            // If tileSize is set, the bounds need to be recalculated
+            this.map.calculateBounds();
             this.drawTiles();
 
             if (this._attribution) {
@@ -63,7 +67,7 @@ export class TileLayer extends Layer {
 
         const left = Math.floor((this.map.bounds.topLeft.x + 20037508.34) / (2 * 20037508.34) * totalTiles);
         const right = Math.floor((this.map.bounds.bottomRight.x + 20037508.34) / (2 * 20037508.34) * totalTiles);
-        
+
         // Convert projected y-coordinates to latitude
         const topLeftLat = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.topLeft.y / 6378137))) * (180 / Math.PI);
         const bottomRightLat = (Math.PI / 2 - 2 * Math.atan(Math.exp(-this.map.bounds.bottomRight.y / 6378137))) * (180 / Math.PI);
@@ -71,7 +75,7 @@ export class TileLayer extends Layer {
         const top = Math.floor((1 - Math.log(Math.tan(topLeftLat * Math.PI / 180) + 1 / Math.cos(topLeftLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
         const bottom = Math.floor((1 - Math.log(Math.tan(bottomRightLat * Math.PI / 180) + 1 / Math.cos(bottomRightLat * Math.PI / 180)) / Math.PI) / 2 * totalTiles);
 
-        return [ 
+        return [
             Math.max(0, left),
             Math.max(0, right),
             Math.max(0, top),
@@ -96,10 +100,10 @@ export class TileLayer extends Layer {
 
         // Calculate the extent of the tile in Web Mercator coordinates
         const extent = [
-          x * this._tileSize * resolution - halfEarthCircumference,
-          halfEarthCircumference - y * this._tileSize * resolution,
-          (x + 1) * this._tileSize * resolution - halfEarthCircumference,
-          halfEarthCircumference - (y + 1) * this._tileSize * resolution,
+            x * this._tileSize * resolution - halfEarthCircumference,
+            halfEarthCircumference - y * this._tileSize * resolution,
+            (x + 1) * this._tileSize * resolution - halfEarthCircumference,
+            halfEarthCircumference - (y + 1) * this._tileSize * resolution,
         ];
 
         return extent;

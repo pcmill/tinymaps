@@ -14,7 +14,8 @@ import { Interactive } from "./interactive/Interactive";
 export class Map {
     _center: Point;
     _zoom: number;
-    _mapBounds: Bounds;
+    _tileSize: number;
+    _mapBounds: Bounds | null;
     _element: HTMLElement;
     _projection: Projection;
 
@@ -42,6 +43,8 @@ export class Map {
 
         this._center = this._projection.project(mapOptions.center);
         this._zoom = mapOptions.zoom;
+        this._mapBounds = null;
+        this._tileSize = 256;
 
         const element = document.getElementById(mapOptions.elementId);
 
@@ -52,7 +55,7 @@ export class Map {
         this._width = element.clientWidth;
         this._height = element.clientHeight;
 
-        this._mapBounds = this.calculateBounds();
+        this.calculateBounds();
         this._element = element;
     }
 
@@ -66,7 +69,7 @@ export class Map {
 
     set zoom(zoom: number) {
         this._zoom = zoom;
-        this._mapBounds = this.calculateBounds();
+        this.calculateBounds();
 
         for (const layer of this.layers) {
             layer.update();
@@ -94,12 +97,16 @@ export class Map {
     }
 
     get bounds(): Bounds {
+        if (!this._mapBounds) {
+            throw new Error("Map bounds not set");
+        }
+
         return this._mapBounds;
     }
 
     set centerWorld(center: Point) {
         this._center = center;
-        this._mapBounds = this.calculateBounds();
+        this.calculateBounds();
 
         for (const layer of this.layers) {
             layer.update();
@@ -108,11 +115,15 @@ export class Map {
 
     set center(center: LatLon) {
         this._center = this._projection.project(center);
-        this._mapBounds = this.calculateBounds();
+        this.calculateBounds();
 
         for (const layer of this.layers) {
             layer.update();
         }
+    }
+
+    set tileSize(tileSize: number) {
+        this._tileSize = tileSize;
     }
 
     addAttribution(html: string) {
@@ -124,19 +135,17 @@ export class Map {
     }
 
     calculateResolution(): number {
-        // Define constants
-        const earthRadius = 6378137; // in meters
-        const mapWidth = this._width; // in pixels
-        const mapHeight = this._height; // in pixels
+        const earthCircumference = 2 * Math.PI * this._radius;
+        
+        const totalTilesOneAxis = Math.pow(2, this._zoom);
+        const totalPixelsOneAxis = totalTilesOneAxis * this._tileSize;
 
-        // Calculate resolution based on zoom level, map width, and map height
-        const resolution = (2 * Math.PI * earthRadius) / (Math.pow(2, this._zoom) * Math.max(mapWidth, mapHeight));
-
-        return resolution * 2;
+        // Resolution (meters per pixel)
+        return earthCircumference / totalPixelsOneAxis;
     }
 
     // Calculate bounds based on center and zoom and on size of element
-    private calculateBounds() {
+    calculateBounds() {
         const resolution = this.calculateResolution();
 
         // Calculate half extents of the map in projected coordinates
@@ -149,7 +158,7 @@ export class Map {
         const maxX = this._center.x + halfWidth;
         const maxY = this._center.y + halfHeight;
 
-        return new Bounds(new Point(minX, maxY), new Point(maxX, minY));
+        this._mapBounds = new Bounds(new Point(minX, maxY), new Point(maxX, minY));
     }
 
     // Adding a layer to the map
@@ -171,6 +180,8 @@ export class Map {
 
     pixelToPoint(pixelCoordinates: Point): Point {
         // Convert the map bounds to world coordinates
+        if (!this._mapBounds) throw new Error("Map bounds not set");
+
         const topLeftWorld = this._mapBounds.topLeft;
         const bottomRightWorld = this._mapBounds.bottomRight;
 
@@ -187,6 +198,8 @@ export class Map {
 
     pointToPixel(worldCoordinates: Point): Point {
         // Convert the map bounds to world coordinates
+        if (!this._mapBounds) throw new Error("Map bounds not set");
+
         const topLeftWorld = this._mapBounds.topLeft;
         const bottomRightWorld = this._mapBounds.bottomRight;
 
