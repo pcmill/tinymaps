@@ -3,11 +3,11 @@ import { LatLon } from "../main";
 export type MarkerLayerOptions = {
     // The id of the layer
     id: string;
-    markers?: Marker[];
+    center: LatLon;
+    options?: MarkerOptions;
 }
 
-export type Marker = {
-    center: LatLon;
+export type MarkerOptions = {
     borderColor?: string;
     fillColor?: string;
     radius?: string;

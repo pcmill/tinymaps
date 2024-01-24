@@ -50,4 +50,7 @@ Next goals:
 
 - Mobile zooming (pinch to zoom)
 - Zooming should take cursor placement in mind
-- Better handling of the map edges
+- Layer position (up, down, to top)
+- SVG Marker
+- BindHTML, a way to add HTML elements to things like Markers
+- GeoJSON layer

@@ -1,4 +1,4 @@
-import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer, ImageLayer, BoundingBox, LineLayer } from './main.ts';
+import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer, ImageLayer, BoundingBox, LineLayer, LayerGroup } from './main.ts';
 
 const mapInteractive = new Map({
     elementId: 'mapInteractive',
@@ -40,22 +40,42 @@ const coordinates = new LineLayer({
 
 mapInteractive.add(coordinates);
 
-const markers = new MarkerLayer({
-    id: 'markers',
-    markers: [
-        {
-            center: new LatLon(52.0906, 5.1213),
-        },
-        {
-            center: new LatLon(48.858, 2.294),
-        },
-        {
-            center: new LatLon(50.8478, 4.3601),
-        }
-    ]
+const utrechtMarker = new MarkerLayer({
+    id: 'marker1',
+    center: new LatLon(52.0906, 5.1213),
+    options: {
+        radius: '12px',
+        fillColor: 'darkblue',
+        borderColor: 'lightblue',
+    }
 });
 
-mapInteractive.add(markers);
+const brusselsMarker = new MarkerLayer({
+    id: 'marker2',
+    center: new LatLon(50.8478, 4.3601),
+    options: {
+        fillColor: 'red',
+    }
+});
+
+const parisMarker = new MarkerLayer({
+    id: 'marker3',
+    center: new LatLon(48.858, 2.294),
+});
+
+const markerGroup = new LayerGroup();
+
+markerGroup.addLayer(utrechtMarker);
+mapInteractive.add(utrechtMarker);
+markerGroup.addLayer(brusselsMarker);
+mapInteractive.add(brusselsMarker);
+markerGroup.addLayer(parisMarker);
+mapInteractive.add(parisMarker);
+
+// Remove the markers after 5 seconds
+setTimeout(() => {
+    markerGroup.removeLayers();
+}, 5000);
 
 const mapStatic = new Map({
     elementId: 'mapStatic',

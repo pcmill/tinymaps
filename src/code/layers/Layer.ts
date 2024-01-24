@@ -46,7 +46,9 @@ export class Layer {
     removeLayer() {
         if (!this.map) throw new Error('Map is not set');
 
+        this.map.remove(this);
         this.map.element.removeChild(this.canvas!);
+
         this.map = null;
         this.canvas = null;
         this.canvasContext = null;

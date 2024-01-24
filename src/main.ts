@@ -2,6 +2,7 @@ import { Map } from "./code/Map";
 import { LatLon } from "./code/LatLon";
 import { Point } from "./code/Point";
 import { BoundingBox } from "./code/BoundingBox";
+import { LayerGroup } from "./code/layers/LayerGroup";
 import { TileLayer } from "./code/layers/TileLayer";
 import { MarkerLayer } from "./code/layers/MarkerLayer";
 import { ImageLayer } from "./code/layers/ImageLayer";
@@ -15,6 +16,7 @@ export {
   LatLon,
   Map,
   BoundingBox,
+  LayerGroup,
   TileLayer,
   ImageLayer,
   MarkerLayer,

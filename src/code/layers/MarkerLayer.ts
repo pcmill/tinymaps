@@ -1,34 +1,32 @@
-import { Marker, MarkerLayerOptions } from "../../models/MarkerLayerOptions";
+import { MarkerLayerOptions, MarkerOptions } from "../../models/MarkerLayerOptions";
+import { LatLon } from "../LatLon";
 import { Map } from "../Map";
 import { Layer } from "./Layer";
 
 export class MarkerLayer extends Layer {
-    _markers: Marker[] = [];
+    _center: LatLon | null = null;
+    _options: MarkerOptions | null = null;
 
     constructor(markerLayerOptions: MarkerLayerOptions) {
         super(markerLayerOptions.id);
 
-        if (markerLayerOptions.markers) {
-            this._markers = markerLayerOptions.markers;
+        if (markerLayerOptions.center) {
+            this._center = markerLayerOptions.center;
+        }
+
+        if (markerLayerOptions.options) {
+            this._options = markerLayerOptions.options;
         }
     }
 
     addLayer(map: Map) {
         super.addLayer(map);
-        this.drawLayers();
+        this.drawMarker();
     }
 
     update() {
         super.update();
-        this.drawLayers();
-    }
-
-    private drawLayers() {
-        if (this._markers) {
-            for (const marker of this._markers) {
-                this.drawMarker(marker);
-            }
-        }
+        this.drawMarker();
     }
 
     private getRadiusPixels(radius: string): number {
@@ -50,24 +48,26 @@ export class MarkerLayer extends Layer {
         throw new Error("Radius should end with 'px' or 'm'");
     }
 
-    private drawMarker(marker: Marker) {
-        const radius = marker.radius || '10px';
-        const fillColor = marker.fillColor || 'darkblue';
-        const borderColor = marker.borderColor || 'white';
+    private drawMarker() {
+        const radius = this._options?.radius || '10px';
+        const fillColor = this._options?.fillColor || 'darkblue';
+        const borderColor = this._options?.borderColor || 'white';
 
-        const center = this.map!.projection.project(marker.center);
-        const pixelCoordinates = this.map!.pointToPixel(center);
-        const radiusPixels = this.getRadiusPixels(radius);
+        if (this._center) {
+            const center = this.map!.projection.project(this._center);
+            const pixelCoordinates = this.map!.pointToPixel(center);
+            const radiusPixels = this.getRadiusPixels(radius);
 
-        const ctx = this.canvasContext!;
-        ctx.beginPath();
-        ctx.arc(pixelCoordinates.x, pixelCoordinates.y, radiusPixels, 0, 2 * Math.PI, false);
+            const ctx = this.canvasContext!;
+            ctx.beginPath();
+            ctx.arc(pixelCoordinates.x, pixelCoordinates.y, radiusPixels, 0, 2 * Math.PI, false);
 
-        ctx.fillStyle = fillColor;
-        ctx.fill();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
 
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = borderColor;
-        ctx.stroke();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = borderColor;
+            ctx.stroke();
+        }
     }
 }

@@ -168,6 +168,14 @@ export class Map {
         this.layers.push(layer);
     }
 
+    remove(layer: Layer) {
+        const index = this.layers.findIndex(l => l.id === layer.id);
+
+        if (index > -1) {
+            this.layers.splice(index, 1);
+        }
+    }
+
     attach(interactive: Interactive) {
         interactive.setMap(this);
 
