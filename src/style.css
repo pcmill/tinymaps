@@ -4,22 +4,12 @@
     height: 500px;
     background-color: #ccc;
     overflow: hidden;
-    position: relative;
     touch-action: none;
 }
 
-#map > canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 #map > .attribution {
-    position: absolute;
-    bottom: 0;
-    right: 0;
     padding: .4rem .6rem;
-    font-family: sans-serif;
+    font-family: system-ui;
     font-size: .8rem;
     background-color: white;
     color: #333;

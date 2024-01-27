@@ -13,7 +13,7 @@ export class Layer {
 
     constructor(id: string) {
         if (isEmpty(id)) {
-            throw new Error('Layer id cannot be empty');
+            throw new Error("Layer id cannot be empty");
         }
 
         this.id = id;
@@ -29,22 +29,26 @@ export class Layer {
     }
 
     addLayer(map: Map) {
-        if (!map) throw new Error('Map is required');
+        if (!map) throw new Error("Map is required");
 
         this.map = map;
 
-        this.canvas = document.createElement('canvas');
+        this.canvas = document.createElement("canvas");
         this.canvas.id = this.id;
         this.map.element.appendChild(this.canvas);
 
+        this.canvas.style.position = "absolute";
+        this.canvas.style.top = "0";
+        this.canvas.style.left = "0";
+
         this.canvas.width = map.width;
         this.canvas.height = map.height;
-        this.canvasContext = this.canvas.getContext('2d');
+        this.canvasContext = this.canvas.getContext("2d");
         this.zoom = map.zoom;
     }
 
     removeLayer() {
-        if (!this.map) throw new Error('Map is not set');
+        if (!this.map) throw new Error("Map is not set");
 
         this.map.remove(this);
         this.map.element.removeChild(this.canvas!);

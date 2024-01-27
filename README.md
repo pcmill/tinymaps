@@ -4,7 +4,7 @@ A mapping library made with a focus on small size and extensibility. Tinymaps ha
 
 ## API
 
-The class everything revolves around is the `Map`. `Map` gives you no interactivity though, it is as light as possible. If you just need a static map the code will be around 7 to 8kb (not gzipped).
+The class everything revolves around is the `Map`. `Map` gives you no interactivity though, it is as light as possible. If you just need a static map the code will be around 8.5kb (not gzipped).
 
 The interactivity you need can be attached to the `Map` like so:
 

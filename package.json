@@ -1,7 +1,21 @@
 {
   "name": "tinymaps",
-  "private": true,
-  "version": "0.0.0",
+  "description": "Mapping library written in Typescript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Pieter van Mill",
+  "entry": "src/index.ts",
+  "main": "dist/tinymaps.umd.js",
+  "types": "dist/main.d.ts",
+  "module": "dist/tinymaps.es.js",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/tinymaps.es.js",
+      "require": "./dist/tinymaps.umd.js"
+    }
+  },
+  "files": ["dist"],
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +26,7 @@
   "devDependencies": {
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
-    "vitest": "^1.2.0"
+    "vitest": "^1.2.0",
+    "vite-plugin-dts": "^3.7.2"
   }
 }

@@ -52,6 +52,8 @@ export class Map {
             throw new Error("Element not found");
         }
 
+        element.style.position = "relative";
+
         this._width = element.clientWidth;
         this._height = element.clientHeight;
 
@@ -131,12 +133,16 @@ export class Map {
         attribution.classList.add("attribution");
         attribution.innerHTML = html;
 
+        attribution.style.position = "absolute";
+        attribution.style.bottom = "0";
+        attribution.style.right = "0";
+
         this._element.appendChild(attribution);
     }
 
     calculateResolution(): number {
         const earthCircumference = 2 * Math.PI * this._radius;
-        
+
         const totalTilesOneAxis = Math.pow(2, this._zoom);
         const totalPixelsOneAxis = totalTilesOneAxis * this._tileSize;
 
@@ -169,7 +175,7 @@ export class Map {
     }
 
     remove(layer: Layer) {
-        const index = this.layers.findIndex(l => l.id === layer.id);
+        const index = this.layers.findIndex((l) => l.id === layer.id);
 
         if (index > -1) {
             this.layers.splice(index, 1);
@@ -198,8 +204,8 @@ export class Map {
         const scaleY = (topLeftWorld.y - bottomRightWorld.y) / this._height;
 
         // Convert the pixel coordinates to world coordinates
-        const worldX = (pixelCoordinates.x * scaleX) + topLeftWorld.x;
-        const worldY = topLeftWorld.y - (pixelCoordinates.y * scaleY);
+        const worldX = pixelCoordinates.x * scaleX + topLeftWorld.x;
+        const worldY = topLeftWorld.y - pixelCoordinates.y * scaleY;
 
         return new Point(worldX, worldY);
     }
