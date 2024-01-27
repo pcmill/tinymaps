@@ -44,7 +44,7 @@ class _ {
     this.latitude = t, this.longitude = e;
   }
 }
-class M {
+class y {
   project(t) {
     if (!t)
       throw new Error("LatLon is required in projection");
@@ -56,7 +56,7 @@ class M {
     return new _(0, 0);
   }
 }
-class y extends M {
+class M extends y {
   /**
    * Projects a latitude and longitude to a point on a 2D plane
    * @param {LatLon} latlon
@@ -80,7 +80,7 @@ class y extends M {
     return new _(n, s);
   }
 }
-class v {
+class L {
   constructor(t) {
     o(this, "_center");
     o(this, "_zoom");
@@ -99,11 +99,11 @@ class v {
       throw new Error("Center is required");
     if (!t.zoom || t.zoom < 0 || t.zoom > 20)
       throw new Error("Zoom is required and should be between 0 and 20");
-    this._projection = new y(), this._center = this._projection.project(t.center), this._zoom = t.zoom, this._mapBounds = null, this._tileSize = 256;
+    this._projection = new M(), this._center = this._projection.project(t.center), this._zoom = t.zoom, this._mapBounds = null, this._tileSize = 256;
     const e = document.getElementById(t.elementId);
     if (!e)
       throw new Error("Element not found");
-    this._width = e.clientWidth, this._height = e.clientHeight, this.calculateBounds(), this._element = e;
+    e.style.position = "relative", this._width = e.clientWidth, this._height = e.clientHeight, this.calculateBounds(), this._element = e;
   }
   get projection() {
     return this._projection;
@@ -151,7 +151,7 @@ class v {
   }
   addAttribution(t) {
     const e = document.createElement("div");
-    e.classList.add("attribution"), e.innerHTML = t, this._element.appendChild(e);
+    e.classList.add("attribution"), e.innerHTML = t, e.style.position = "absolute", e.style.bottom = "0", e.style.right = "0", this._element.appendChild(e);
   }
   calculateResolution() {
     const t = 2 * Math.PI * this._radius, i = Math.pow(2, this._zoom) * this._tileSize;
@@ -235,7 +235,7 @@ class w {
   addLayer(t) {
     if (!t)
       throw new Error("Map is required");
-    this.map = t, this.canvas = document.createElement("canvas"), this.canvas.id = this.id, this.map.element.appendChild(this.canvas), this.canvas.width = t.width, this.canvas.height = t.height, this.canvasContext = this.canvas.getContext("2d"), this.zoom = t.zoom;
+    this.map = t, this.canvas = document.createElement("canvas"), this.canvas.id = this.id, this.map.element.appendChild(this.canvas), this.canvas.style.position = "absolute", this.canvas.style.top = "0", this.canvas.style.left = "0", this.canvas.width = t.width, this.canvas.height = t.height, this.canvasContext = this.canvas.getContext("2d"), this.zoom = t.zoom;
   }
   removeLayer() {
     if (!this.map)
@@ -274,8 +274,6 @@ class I extends w {
   removeLayer() {
     super.removeLayer(), this._tileBuffer.clear();
   }
-  // TODO: purge the tileBuffer when the map is panned or zoomed
-  // so the tileBuffer does not grow indefinitely
   update() {
     super.update(), this.drawTiles();
   }
@@ -486,7 +484,7 @@ export {
   _ as LatLon,
   z as LayerGroup,
   T as LineLayer,
-  v as Map,
+  L as Map,
   C as MarkerLayer,
   j as Pan,
   l as Point,
