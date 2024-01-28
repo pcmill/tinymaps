@@ -8,7 +8,7 @@ The class everything revolves around is the `Map`. `Map` gives you no interactiv
 
 The interactivity you need can be attached to the `Map` like so:
 
-```
+```javascript
 import { Map, LatLon, Zoom, Pan } from 'tinymaps';
 
 try {
@@ -41,6 +41,31 @@ try {
 ```
 
 As you can see you `add` layers and `attach` interactivities.
+
+### Styling
+
+Currently a minimal amount of CSS is needed:
+
+```css
+#map {
+    width: 500px;
+    height: 500px;
+}
+
+#map > .attribution {
+    padding: 0.4rem 0.6rem;
+    opacity: 0.85;
+    font-family: system-ui;
+    font-size: 0.8rem;
+    background-color: white;
+}
+
+#map > .attribution > a {
+    color: #333;
+}
+```
+
+Ofcourse the size of the map should be adjusted to your needs. The attribution is easy to style to your needs.
 
 ### Status
 

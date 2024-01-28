@@ -136,6 +136,7 @@ export class Map {
         attribution.style.position = "absolute";
         attribution.style.bottom = "0";
         attribution.style.right = "0";
+        attribution.style.zIndex = "1000";
 
         this._element.appendChild(attribution);
     }
