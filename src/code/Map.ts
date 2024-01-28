@@ -128,19 +128,6 @@ export class Map {
         this._tileSize = tileSize;
     }
 
-    addAttribution(html: string) {
-        const attribution = document.createElement("div");
-        attribution.classList.add("attribution");
-        attribution.innerHTML = html;
-
-        attribution.style.position = "absolute";
-        attribution.style.bottom = "0";
-        attribution.style.right = "0";
-        attribution.style.zIndex = "1000";
-
-        this._element.appendChild(attribution);
-    }
-
     calculateResolution(): number {
         const earthCircumference = 2 * Math.PI * this._radius;
 

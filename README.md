@@ -9,7 +9,7 @@ The class everything revolves around is the `Map`. `Map` gives you no interactiv
 The interactivity you need can be attached to the `Map` like so:
 
 ```javascript
-import { Map, LatLon, Zoom, Pan } from 'tinymaps';
+import { Map, LatLon, Zoom, Pan, Attribution } from 'tinymaps';
 
 try {
     const map = new Map({
@@ -24,6 +24,10 @@ try {
     });
 
     map.add(tilelayer);
+
+    const attribution = new Attribution('© OpenStreetMap contributors');
+
+    map.attact(attribution);
 
     const zoom = new Zoom({
         maxZoom: 12,

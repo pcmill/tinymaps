@@ -1,4 +1,4 @@
-import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer, ImageLayer, BoundingBox, LineLayer, LayerGroup } from './main.ts';
+import { Map, LatLon, TileLayer, Pan, Zoom, MarkerLayer, ImageLayer, BoundingBox, LineLayer, LayerGroup, Attribution } from './main.ts';
 
 const mapInteractive = new Map({
     elementId: 'mapInteractive',
@@ -10,8 +10,10 @@ const tilelayer = new TileLayer({
     id: 'tiles',
     tileSize: 256,
     tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
 });
+
+const interactiveAttribution = new Attribution('© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors');
+mapInteractive.attach(interactiveAttribution);
 
 mapInteractive.add(tilelayer);
 
@@ -87,8 +89,10 @@ const satelliteLayer = new TileLayer({
     id: 'satellite',
     tileSize: 512,
     tileUrl: 'https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
-    attribution: '© Maptiler',
 });
+
+const staticAttribution = new Attribution('© Maptiler');
+mapStatic.attach(staticAttribution);
 
 mapStatic.add(satelliteLayer);
 
@@ -102,8 +106,10 @@ const imageTilelayer = new TileLayer({
     id: 'tiles',
     tileSize: 256,
     tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
 });
+
+const imageAttribution = new Attribution('© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors');
+mapImage.attach(imageAttribution);
 
 mapImage.add(imageTilelayer);
 

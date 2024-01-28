@@ -8,7 +8,6 @@ import { TileBuffer } from "./TileBuffer";
 export class TileLayer extends Layer {
     _tileUrl: string;
     _tileSize: number;
-    _attribution: string;
     _tileBuffer = new TileBuffer();
 
     constructor(tileLayerOptions: TileLayerOptions) {
@@ -16,7 +15,6 @@ export class TileLayer extends Layer {
 
         this._tileSize = tileLayerOptions.tileSize || 256;
         this._tileUrl = tileLayerOptions.tileUrl;
-        this._attribution = tileLayerOptions.attribution || "";
     }
 
     addLayer(map: Map) {
@@ -28,10 +26,6 @@ export class TileLayer extends Layer {
             // If tileSize is set, the bounds need to be recalculated
             this.map.calculateBounds();
             this.drawTiles();
-
-            if (this._attribution) {
-                this.map.addAttribution(this._attribution);
-            }
         }
     }
 

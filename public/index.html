@@ -27,7 +27,7 @@
     </main>
 
     <script type="module">
-        import { Map, LatLon, TileLayer, LayerGroup, MarkerLayer, Pan, Zoom, LineLayer, ImageLayer, BoundingBox } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
+        import { Map, LatLon, TileLayer, LayerGroup, MarkerLayer, Pan, Zoom, LineLayer, ImageLayer, BoundingBox, Attribution } from 'https://pcmill.github.io/tinymaps/tinymaps.es.js';
 
         const mapInteractive = new Map({
             elementId: 'mapInteractive',
@@ -38,11 +38,16 @@
         const tilelayer = new TileLayer({
             id: 'tiles',
             tileSize: 256,
-            tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+            tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         });
 
         mapInteractive.add(tilelayer);
+
+        const interactiveAttribution = new Attribution(
+            '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        );
+
+        mapInteractive.attach(interactiveAttribution);
 
         const pan = new Pan();
         mapInteractive.attach(pan);
@@ -112,11 +117,16 @@
         const satelliteLayer = new TileLayer({
             id: 'satellite',
             tileSize: 256,
-            tileUrl: 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU',
-            attribution: '© Maptiler',
+            tileUrl: 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=4hSS0cBAZ5TFqAIlqlBU'
         });
 
         mapStatic.add(satelliteLayer);
+
+        const staticAttribution = new Attribution(
+            '© <a href="https://www.maptiler.com/">MapTiler</a> contributors'
+        );
+
+        mapStatic.attach(staticAttribution);
 
         const mapImage = new Map({
             elementId: 'mapImage',
@@ -127,11 +137,16 @@
         const imageTilelayer = new TileLayer({
             id: 'tiles',
             tileSize: 256,
-            tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+            tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         });
 
         mapImage.add(imageTilelayer);
+
+        const imageAttribution = new Attribution(
+            '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        );
+
+        mapImage.attach(imageAttribution);
 
         const imageLayer = new ImageLayer({
             id: 'image',
