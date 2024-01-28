@@ -9,4 +9,5 @@ import { ImageLayer } from "./code/layers/ImageLayer";
 import { LineLayer } from "./code/layers/LineLayer";
 import { Pan } from "./code/interactive/Pan";
 import { Zoom } from "./code/interactive/Zoom";
-export { Point, LatLon, Map, BoundingBox, LayerGroup, TileLayer, ImageLayer, MarkerLayer, LineLayer, Pan, Zoom, };
+import { Attribution } from "./code/interactive/Attribution";
+export { Point, LatLon, Map, BoundingBox, LayerGroup, TileLayer, ImageLayer, MarkerLayer, LineLayer, Pan, Zoom, Attribution, };

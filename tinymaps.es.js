@@ -14,7 +14,7 @@ class b {
     this.topLeft = t, this.bottomRight = e;
   }
 }
-function m(r) {
+function d(r) {
   return r == null;
 }
 function p(r) {
@@ -29,11 +29,11 @@ class l {
     this.x = t, this.y = e;
   }
 }
-class _ {
+class f {
   constructor(t, e) {
     o(this, "latitude");
     o(this, "longitude");
-    if (m(t) || m(e))
+    if (d(t) || d(e))
       throw new Error("Latitude and longitude must be provided");
     if (p(t) || p(e))
       throw new Error("Latitude and longitude must be numbers");
@@ -53,7 +53,7 @@ class y {
   unproject(t) {
     if (!t)
       throw new Error("Point is required in projection");
-    return new _(0, 0);
+    return new f(0, 0);
   }
 }
 class M extends y {
@@ -77,7 +77,7 @@ class M extends y {
     if (!t)
       throw new Error("Point is required in unprojection");
     const e = 6378137, i = 180 / Math.PI, s = t.x * i / e, n = (2 * Math.atan(Math.exp(t.y / e)) - Math.PI / 2) * i;
-    return new _(n, s);
+    return new f(n, s);
   }
 }
 class L {
@@ -148,10 +148,6 @@ class L {
   }
   set tileSize(t) {
     this._tileSize = t;
-  }
-  addAttribution(t) {
-    const e = document.createElement("div");
-    e.classList.add("attribution"), e.innerHTML = t, e.style.position = "absolute", e.style.bottom = "0", e.style.right = "0", e.style.zIndex = "1000", this._element.appendChild(e);
   }
   calculateResolution() {
     const t = 2 * Math.PI * this._radius, i = Math.pow(2, this._zoom) * this._tileSize;
@@ -225,7 +221,7 @@ class w {
     o(this, "canvasContext");
     o(this, "zoom");
     o(this, "map");
-    if (m(t))
+    if (d(t))
       throw new Error("Layer id cannot be empty");
     this.id = t, this.zoom = 1, this.map = null, this.canvas = null, this.canvasContext = null;
   }
@@ -264,12 +260,11 @@ class I extends w {
     super(e.id);
     o(this, "_tileUrl");
     o(this, "_tileSize");
-    o(this, "_attribution");
     o(this, "_tileBuffer", new P());
-    this._tileSize = e.tileSize || 256, this._tileUrl = e.tileUrl, this._attribution = e.attribution || "";
+    this._tileSize = e.tileSize || 256, this._tileUrl = e.tileUrl;
   }
   addLayer(e) {
-    super.addLayer(e), this.map && (this.map.tileSize = this._tileSize, this.map.calculateBounds(), this.drawTiles(), this._attribution && this.map.addAttribution(this._attribution));
+    super.addLayer(e), this.map && (this.map.tileSize = this._tileSize, this.map.calculateBounds(), this.drawTiles());
   }
   removeLayer() {
     super.removeLayer(), this._tileBuffer.clear();
@@ -298,7 +293,7 @@ class I extends w {
     ];
   }
   getTileUrl(e, i, s) {
-    if (m(e) || m(i) || m(s))
+    if (d(e) || d(i) || d(s))
       throw new Error("Invalid tile coordinates");
     return this._tileUrl.replace("{x}", e.toString()).replace("{y}", i.toString()).replace("{z}", s.toString());
   }
@@ -357,8 +352,8 @@ class C extends w {
     var n, a, h;
     const e = ((n = this._options) == null ? void 0 : n.radius) || "10px", i = ((a = this._options) == null ? void 0 : a.fillColor) || "darkblue", s = ((h = this._options) == null ? void 0 : h.borderColor) || "white";
     if (this._center) {
-      const c = this.map.projection.project(this._center), u = this.map.pointToPixel(c), f = this.getRadiusPixels(e), d = this.canvasContext;
-      d.beginPath(), d.arc(u.x, u.y, f, 0, 2 * Math.PI, !1), d.fillStyle = i, d.fill(), d.lineWidth = 5, d.strokeStyle = s, d.stroke();
+      const c = this.map.projection.project(this._center), u = this.map.pointToPixel(c), _ = this.getRadiusPixels(e), m = this.canvasContext;
+      m.beginPath(), m.arc(u.x, u.y, _, 0, 2 * Math.PI, !1), m.fillStyle = i, m.fill(), m.lineWidth = 5, m.strokeStyle = s, m.stroke();
     }
   }
 }
@@ -478,10 +473,27 @@ class B {
     i >= this.minZoom && i <= this.maxZoom && (this.map.zoom = i);
   }
 }
+class Z {
+  constructor(t) {
+    o(this, "map");
+    o(this, "attribution");
+    this.attribution = document.createElement("div"), this.attribution.className = "attribution", this.attribution.innerHTML = t, this.attribution.style.position = "absolute", this.attribution.style.bottom = "0", this.attribution.style.right = "0", this.attribution.style.zIndex = "1000", this.map = null;
+  }
+  setMap(t) {
+    this.map = t, this.map && this.attribution && t.element.appendChild(this.attribution);
+  }
+  removeAttribution(t) {
+    this.map && this.attribution && t.element.removeChild(this.attribution), this.map = null, this.attribution = null;
+  }
+  updateAttribution(t) {
+    this.attribution && (this.attribution.innerHTML = t);
+  }
+}
 export {
+  Z as Attribution,
   E as BoundingBox,
   R as ImageLayer,
-  _ as LatLon,
+  f as LatLon,
   z as LayerGroup,
   T as LineLayer,
   L as Map,

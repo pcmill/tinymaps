@@ -5,7 +5,6 @@ import { TileBuffer } from "./TileBuffer";
 export declare class TileLayer extends Layer {
     _tileUrl: string;
     _tileSize: number;
-    _attribution: string;
     _tileBuffer: TileBuffer;
     constructor(tileLayerOptions: TileLayerOptions);
     addLayer(map: Map): void;

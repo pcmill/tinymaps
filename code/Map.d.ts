@@ -34,7 +34,6 @@ export declare class Map {
     set centerWorld(center: Point);
     set center(center: LatLon);
     set tileSize(tileSize: number);
-    addAttribution(html: string): void;
     calculateResolution(): number;
     calculateBounds(): void;
     add(layer: Layer): void;
