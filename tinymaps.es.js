@@ -151,7 +151,7 @@ class L {
   }
   addAttribution(t) {
     const e = document.createElement("div");
-    e.classList.add("attribution"), e.innerHTML = t, e.style.position = "absolute", e.style.bottom = "0", e.style.right = "0", this._element.appendChild(e);
+    e.classList.add("attribution"), e.innerHTML = t, e.style.position = "absolute", e.style.bottom = "0", e.style.right = "0", e.style.zIndex = "1000", this._element.appendChild(e);
   }
   calculateResolution() {
     const t = 2 * Math.PI * this._radius, i = Math.pow(2, this._zoom) * this._tileSize;
