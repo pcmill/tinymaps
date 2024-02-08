@@ -375,6 +375,11 @@ class R extends w {
   update() {
     super.update(), this.drawImage();
   }
+  setUrl(e) {
+    this._imageUrl = e, this._imageData = new Image(), this._imageData.src = this._imageUrl, this._imageData.onload = () => {
+      this.update();
+    };
+  }
   drawImage() {
     if (!this.map)
       throw new Error("Map is not set");

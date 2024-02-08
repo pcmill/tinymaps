@@ -12,5 +12,6 @@ export declare class ImageLayer extends Layer {
     constructor(options: ImageLayerOptions);
     addLayer(map: Map): void;
     update(): void;
+    setUrl(url: string): void;
     private drawImage;
 }
