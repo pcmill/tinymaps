@@ -38,6 +38,16 @@ export class ImageLayer extends Layer {
         this.drawImage();
     }
 
+    setUrl(url: string): void {
+        this._imageUrl = url;
+        this._imageData = new Image();
+        this._imageData.src = this._imageUrl;
+
+        this._imageData.onload = () => {
+            this.update();
+        };
+    }
+
     private drawImage() {
         if (!this.map) throw new Error("Map is not set");
 
