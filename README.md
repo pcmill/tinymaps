@@ -27,7 +27,7 @@ try {
 
     const attribution = new Attribution('© OpenStreetMap contributors');
 
-    map.attact(attribution);
+    map.attach(attribution);
 
     const zoom = new Zoom({
         maxZoom: 12,
