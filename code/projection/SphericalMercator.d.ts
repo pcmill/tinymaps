@@ -1,6 +1,7 @@
-import { LatLon } from "../LatLon";
-import { Point } from "../Point";
-import { Projection } from "./Projection";
+import { LatLon } from '../LatLon';
+import { Point } from '../Point';
+import { Projection } from './Projection';
+
 export declare class SphericalMercatorProjection extends Projection {
     /**
      * Projects a latitude and longitude to a point on a 2D plane

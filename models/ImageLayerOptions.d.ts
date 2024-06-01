@@ -1,4 +1,5 @@
-import { BoundingBox } from "../code/BoundingBox";
+import { BoundingBox } from '../code/BoundingBox';
+
 export type ImageLayerOptions = {
     id: string;
     imageUrl: string;

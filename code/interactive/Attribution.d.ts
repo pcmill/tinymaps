@@ -1,5 +1,6 @@
-import { Map } from "../Map";
-import { Interactive } from "./Interactive";
+import { Map } from '../Map';
+import { Interactive } from './Interactive';
+
 export declare class Attribution implements Interactive {
     map: Map | null;
     attribution: HTMLElement | null;

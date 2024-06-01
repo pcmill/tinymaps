@@ -1,7 +1,8 @@
-import { TileLayerOptions } from "../../models/TileLayerOptions";
-import { Map } from "../Map";
-import { Layer } from "./Layer";
-import { TileBuffer } from "./TileBuffer";
+import { TileLayerOptions } from '../../models/TileLayerOptions';
+import { Map } from '../Map';
+import { Layer } from './Layer';
+import { TileBuffer } from './TileBuffer';
+
 export declare class TileLayer extends Layer {
     _tileUrl: string;
     _tileSize: number;

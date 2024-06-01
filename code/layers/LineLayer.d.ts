@@ -1,6 +1,7 @@
-import { LineCoordinate, LineLayerOptions } from "../../models/LineLayerOptions";
-import { Map } from "../Map";
-import { Layer } from "./Layer";
+import { LineCoordinate, LineLayerOptions } from '../../models/LineLayerOptions';
+import { Map } from '../Map';
+import { Layer } from './Layer';
+
 export declare class LineLayer extends Layer {
     _coordinates: LineCoordinate[];
     _width: number;

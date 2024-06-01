@@ -1,4 +1,5 @@
-import { LatLon } from "../main";
+import { LatLon } from '../main';
+
 export type LineLayerOptions = {
     id: string;
     fillColor?: string;

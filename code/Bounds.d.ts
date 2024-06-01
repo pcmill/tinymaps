@@ -1,4 +1,5 @@
-import { Point } from "./Point";
+import { Point } from './Point';
+
 export declare class Bounds {
     topLeft: Point;
     bottomRight: Point;

@@ -1,6 +1,7 @@
-import { Map } from "../Map";
-import { Point } from "../Point";
-import { Interactive } from "./Interactive";
+import { Map } from '../Map';
+import { Point } from '../Point';
+import { Interactive } from './Interactive';
+
 export declare class Pan implements Interactive {
     map: Map | null;
     mapRect: DOMRect | null;

@@ -1,4 +1,5 @@
-import { LatLon } from "./LatLon";
+import { LatLon } from './LatLon';
+
 export declare class BoundingBox {
     _topLeft: LatLon;
     _bottomRight: LatLon;

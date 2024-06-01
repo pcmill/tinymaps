@@ -1,7 +1,8 @@
-import { MarkerLayerOptions, MarkerOptions } from "../../models/MarkerLayerOptions";
-import { LatLon } from "../LatLon";
-import { Map } from "../Map";
-import { Layer } from "./Layer";
+import { MarkerLayerOptions, MarkerOptions } from '../../models/MarkerLayerOptions';
+import { LatLon } from '../LatLon';
+import { Map } from '../Map';
+import { Layer } from './Layer';
+
 export declare class MarkerLayer extends Layer {
     _center: LatLon | null;
     _options: MarkerOptions | null;

@@ -1,4 +1,5 @@
-import { TileBufferCollection } from "../../models/TileBufferCollection";
+import { TileBufferCollection } from '../../models/TileBufferCollection';
+
 export declare class TileBuffer {
     _collection: TileBufferCollection[];
     _maxAmount: number;

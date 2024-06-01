@@ -1,10 +1,11 @@
-import { TMapOptions } from "../models/MapOptions";
-import { Bounds } from "./Bounds";
-import { Layer } from "./layers/Layer";
-import { LatLon } from "./LatLon";
-import { Point } from "./Point";
-import { Projection } from "./projection/Projection";
-import { Interactive } from "./interactive/Interactive";
+import { TMapOptions } from '../models/MapOptions';
+import { Bounds } from './Bounds';
+import { Layer } from './layers/Layer';
+import { LatLon } from './LatLon';
+import { Point } from './Point';
+import { Projection } from './projection/Projection';
+import { Interactive } from './interactive/Interactive';
+
 /**
  * Responsible for translating latlon to pixel values.
  * Maintains the list of layers.

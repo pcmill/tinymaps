@@ -1,4 +1,5 @@
-import { Map } from "../Map";
+import { Map } from '../Map';
+
 /**
  * Responsible for maintaining the canvas
  */

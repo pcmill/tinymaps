@@ -1,4 +1,5 @@
-import { LatLon } from "../main";
+import { LatLon } from '../main';
+
 export type MarkerLayerOptions = {
     id: string;
     center: LatLon;
