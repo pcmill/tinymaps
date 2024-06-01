@@ -20,6 +20,9 @@ export class Pan implements Interactive {
         this.pointerDown = this.pointerDown.bind(this);
         this.pointerMove = this.pointerMove.bind(this);
         this.pointerUp = this.pointerUp.bind(this);
+        this.touchStart = this.touchStart.bind(this);
+        this.touchMove = this.touchMove.bind(this);
+        this.touchEnd = this.touchEnd.bind(this);
     }
 
     setMap(map: Map) {
@@ -28,6 +31,7 @@ export class Pan implements Interactive {
 
         if (this.map) {
             this.map!.element.addEventListener("pointerdown", this.pointerDown);
+            this.map!.element.addEventListener("touchstart", this.touchStart);
         }
     }
 
@@ -78,5 +82,44 @@ export class Pan implements Interactive {
         this.map!.element.releasePointerCapture(event.pointerId);
         this.map!.element.removeEventListener("pointerup", this.pointerUp);
         this.map!.element.removeEventListener("pointermove", this.pointerMove);
+    }
+
+    private touchStart(event: TouchEvent) {
+        event.preventDefault();
+
+        if (event.touches.length === 1) {
+            this.resolution = this.map!.calculateResolution();
+            this.isPanning = true;
+            const touch = event.touches[0];
+            this.lastPointerPos = new Point(touch.clientX - this.mapRect!.left, touch.clientY - this.mapRect!.top);
+
+            this.map!.element.addEventListener("touchmove", this.touchMove);
+            this.map!.element.addEventListener("touchend", this.touchEnd);
+            this.map!.element.addEventListener("touchcancel", this.touchEnd);
+        }
+    }
+
+    private touchMove(event: TouchEvent) {
+        if (!this.isPanning || !this.lastPointerPos || event.touches.length > 1) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const touch = event.touches[0];
+        const currentPointerPos = new Point(touch.clientX - this.mapRect!.left, touch.clientY - this.mapRect!.top);
+        this.handlePan(currentPointerPos);
+    }
+
+    private touchEnd(event: TouchEvent) {
+        if (!this.isPanning) {
+            return;
+        }
+
+        this.isPanning = false;
+
+        this.map!.element.removeEventListener("touchend", this.touchEnd);
+        this.map!.element.removeEventListener("touchmove", this.touchMove);
+        this.map!.element.removeEventListener("touchcancel", this.touchEnd);
     }
 }
