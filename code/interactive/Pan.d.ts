@@ -14,4 +14,7 @@ export declare class Pan implements Interactive {
     private pointerMove;
     private handlePan;
     private pointerUp;
+    private touchStart;
+    private touchMove;
+    private touchEnd;
 }

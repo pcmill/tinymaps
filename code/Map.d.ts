@@ -5,6 +5,7 @@ import { LatLon } from './LatLon';
 import { Point } from './Point';
 import { Projection } from './projection/Projection';
 import { Interactive } from './interactive/Interactive';
+import { BoundingBox } from './BoundingBox';
 
 /**
  * Responsible for translating latlon to pixel values.
@@ -32,6 +33,7 @@ export declare class Map {
     get height(): number;
     get element(): HTMLElement;
     get bounds(): Bounds;
+    get boundingBox(): BoundingBox;
     set centerWorld(center: Point);
     set center(center: LatLon);
     set tileSize(tileSize: number);
