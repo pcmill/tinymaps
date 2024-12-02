@@ -6,6 +6,7 @@ import { Point } from "./Point";
 import { Projection } from "./projection/Projection";
 import { SphericalMercatorProjection } from "./projection/SphericalMercator";
 import { Interactive } from "./interactive/Interactive";
+import { BoundingBox } from "./BoundingBox";
 
 /**
  * Responsible for translating latlon to pixel values.
@@ -104,6 +105,12 @@ export class Map {
         }
 
         return this._mapBounds;
+    }
+
+    get boundingBox(): BoundingBox {
+        return new BoundingBox(
+            this._projection.unproject(this.bounds.topLeft),
+            this._projection.unproject(this.bounds.bottomRight));
     }
 
     set centerWorld(center: Point) {

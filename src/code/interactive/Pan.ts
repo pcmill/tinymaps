@@ -111,7 +111,7 @@ export class Pan implements Interactive {
         this.handlePan(currentPointerPos);
     }
 
-    private touchEnd(event: TouchEvent) {
+    private touchEnd() {
         if (!this.isPanning) {
             return;
         }
